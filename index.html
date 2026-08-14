@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>TYPE — a typing test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#1d1b17;
+    --bg-2:#141310;
+    --panel:#221f1a;
+    --panel-2:#27231d;
+    --border:#3d382f;
+    --border-soft:#2b2721;
+    --pending:#6d675a;
+    --paper:#efe9db;
+    --error:#e2564f;
+    --error-soft:rgba(226,86,79,.16);
+    --accent:#e2564f;
+    --accent-2:#f0805a;
+    --accent-dim:rgba(226,86,79,.4);
+    --accent-glow:rgba(226,86,79,.55);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 50% -8%, #2a2620 0%, var(--bg-1) 45%, var(--bg-2) 100%);
+    color:var(--paper);
+    font-family:'JetBrains Mono', monospace;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:40px 20px 60px;
+  }
+
+  .app{width:100%;max-width:860px;}
+
+  /* header */
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:38px;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand .glyph{
+    width:34px;height:34px;border-radius:8px;
+    background:linear-gradient(155deg, var(--panel-2), var(--panel));
+    border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;color:var(--accent);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  .brand-text h1{font-size:21px;font-weight:800;letter-spacing:2.5px;margin:0;color:var(--paper);}
+  .brand-text h1 .dot{color:var(--accent);}
+  .brand-text .tag{font-size:10.5px;color:var(--pending);letter-spacing:1.6px;text-transform:uppercase;}
+
+  .mute-btn{
+    background:var(--panel);border:1px solid var(--border);color:var(--pending);
+    width:40px;height:40px;border-radius:10px;cursor:pointer;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:16px;
+    transition:border-color .18s, color .18s, transform .12s;
+  }
+  .mute-btn:hover{border-color:var(--accent-dim);color:var(--paper);}
+  .mute-btn:active{transform:scale(.93);}
+  .mute-btn.active{color:var(--accent);border-color:var(--accent-dim);}
+
+  .volume-control{
+    display:flex;align-items:center;gap:11px;
+    background:var(--panel);border:1px solid var(--border-soft);
+    border-radius:10px;padding:0 14px 0 0;
+  }
+  .volume-control .mute-btn{background:transparent;border:none;}
+  .volume-slider{
+    -webkit-appearance:none;appearance:none;width:88px;height:4px;
+    background:var(--bg-2);border-radius:3px;outline:none;border:1px solid var(--border-soft);
+  }
+  .volume-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
+    background:var(--accent);cursor:pointer;border:2px solid var(--panel);
+    box-shadow:0 0 0 1px var(--accent-dim);
+  }
+  .volume-slider::-moz-range-thumb{
+    width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--panel);
+  }
+  .volume-slider:disabled{opacity:.4;}
+
+  /* controls */
+  .controls{
+    display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;
+    margin-bottom:28px;padding:16px 18px;border-radius:12px;
+    background:var(--panel);border:1px solid var(--border-soft);
+  }
+  .control-group{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .seg{
+    display:flex;flex-wrap:wrap;background:var(--bg-2);border:1px solid var(--border-soft);border-radius:999px;
+    padding:3px;gap:2px;
+  }
+  .seg button{
+    background:transparent;border:none;color:var(--pending);padding:8px 16px;
+    font-family:inherit;font-size:12.5px;letter-spacing:.6px;cursor:pointer;
+    border-radius:999px;transition:background .18s,color .18s;
+  }
+  .seg button:hover{color:var(--paper);}
+  .seg button.active{background:var(--accent);color:#1d1b17;font-weight:700;}
+
+  .time-control{display:flex;align-items:center;gap:12px;}
+  .time-control label{font-size:10.5px;color:var(--pending);text-transform:uppercase;letter-spacing:1.4px;}
+  .time-control input[type=range]{
+    -webkit-appearance:none;width:150px;height:4px;background:var(--bg-2);border-radius:3px;outline:none;
+    border:1px solid var(--border-soft);
+  }
+  .time-control input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:15px;height:15px;border-radius:50%;
+    background:var(--accent);cursor:pointer;border:2px solid var(--panel);
+    box-shadow:0 0 0 1px var(--accent-dim);
+  }
+  .time-control input[type=range]::-moz-range-thumb{
+    width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--panel);
+  }
+  .time-value{font-size:13px;color:var(--paper);font-weight:700;min-width:44px;text-align:right;font-variant-numeric:tabular-nums;}
+
+  .restart-btn{
+    background:var(--bg-2);border:1px solid var(--border-soft);color:var(--pending);
+    padding:9px 16px;border-radius:999px;font-family:inherit;font-size:12.5px;cursor:pointer;
+    display:flex;align-items:center;gap:7px;transition:border-color .18s,color .18s,transform .12s;
+  }
+  .restart-btn:hover{border-color:var(--accent-dim);color:var(--paper);}
+  .restart-btn:active{transform:scale(.96);}
+
+  /* stage */
+  .stage{position:relative;}
+  .hud{
+    display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;
+    padding:0 4px;
+    font-size:11px;color:var(--pending);letter-spacing:.6px;text-transform:uppercase;
+  }
+  .hud .metric{display:flex;flex-direction:column;gap:3px;}
+  .hud .metric b{font-size:24px;color:var(--paper);font-weight:700;letter-spacing:0;text-transform:none;font-variant-numeric:tabular-nums;}
+  .hud .metric.timer b{color:var(--accent);}
+
+  .panel{
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--border-soft);border-radius:16px;
+    padding:38px 34px 34px;position:relative;overflow:hidden;
+    box-shadow:0 24px 60px -30px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.03);
+  }
+  .panel::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:7px;
+    background-image:radial-gradient(circle, var(--bg-2) 2.6px, transparent 2.7px);
+    background-size:17px 7px;background-position:9px 0;
+    opacity:.65;
+  }
+  .panel::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 15% 0%, rgba(255,255,255,.025), transparent 40%);
+  }
+
+  .text-display{
+    font-size:22px;line-height:2;letter-spacing:.2px;
+    user-select:none;position:relative;cursor:text;
+    overflow:hidden;
+  }
+  .char{color:var(--pending);position:relative;transition:color .04s;}
+  .char.correct{color:var(--paper);}
+  .char.incorrect{color:var(--error);background:var(--error-soft);border-radius:3px;}
+
+  .word.done{
+    text-decoration:underline;
+    text-decoration-color:var(--accent-dim);
+    text-decoration-thickness:2px;
+    text-underline-offset:7px;
+  }
+
+  .caret{
+    position:absolute;width:2.5px;border-radius:2px;
+    background:var(--accent);
+    box-shadow:0 0 10px 1px var(--accent-glow);
+    animation:blink 1s step-end infinite;pointer-events:none;
+  }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+  .hidden-input{
+    position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;
+  }
+
+  .focus-hint{
+    position:absolute;inset:0;background:rgba(29,27,23,.88);display:flex;
+    align-items:center;justify-content:center;font-size:14px;color:var(--pending);
+    letter-spacing:.5px;cursor:text;border-radius:16px;
+  }
+  .focus-hint span{border-bottom:1px dashed var(--pending);padding-bottom:2px;}
+
+  /* results */
+  .results{display:none;}
+  .results.show{display:block;}
+  .results .panel{padding:44px 34px;}
+  .results-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;margin-bottom:34px;}
+  .results-grid .stat{text-align:center;}
+  .results-grid .stat b{display:block;font-size:40px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg, var(--accent-2), var(--accent));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .results-grid .stat span{font-size:10.5px;color:var(--pending);text-transform:uppercase;letter-spacing:1.6px;}
+  .results-foot{display:flex;justify-content:center;}
+
+  .mistyped-section{margin-bottom:30px;}
+  .mistyped-section h3{
+    font-size:10.5px;color:var(--pending);text-transform:uppercase;letter-spacing:1.6px;
+    margin:0 0 14px;text-align:center;font-weight:500;
+  }
+  .mistyped-chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;}
+  .chip{
+    background:var(--bg-2);border:1px solid var(--border-soft);border-radius:9px;
+    padding:7px 12px;font-size:14px;color:var(--paper);
+    display:flex;align-items:baseline;gap:7px;
+  }
+  .chip .letter{font-weight:700;color:var(--error);font-size:15px;}
+  .chip .count{font-size:11.5px;color:var(--pending);font-variant-numeric:tabular-nums;}
+  .mistyped-empty{text-align:center;font-size:13px;color:var(--pending);}
+  .try-again{
+    background:linear-gradient(180deg, var(--accent-2), var(--accent));color:#1d1b17;border:none;
+    padding:13px 28px;border-radius:999px;
+    font-family:inherit;font-weight:700;font-size:13.5px;letter-spacing:.6px;cursor:pointer;
+    box-shadow:0 10px 24px -10px var(--accent-glow);
+    transition:transform .12s, box-shadow .12s;
+  }
+  .try-again:hover{transform:translateY(-1px);box-shadow:0 14px 28px -10px var(--accent-glow);}
+  .try-again:active{transform:translateY(0);}
+
+  footer{margin-top:28px;text-align:center;font-size:10.5px;color:var(--border);letter-spacing:.6px;}
+
+  @media (max-width:560px){
+    .controls{flex-direction:column;align-items:stretch;}
+    .control-group{justify-content:space-between;}
+    .text-display{font-size:18px;line-height:1.9;}
+    .results-grid{grid-template-columns:repeat(2,1fr);row-gap:24px;}
+    .volume-slider{width:58px;}
+    .volume-control{padding-right:10px;gap:8px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .caret{animation:none;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand">
+      <div class="glyph">⌨</div>
+      <div class="brand-text">
+        <h1>TYPE<span class="dot">.</span></h1>
+        <div class="tag">typing test</div>
+      </div>
+    </div>
+    <div class="volume-control">
+      <button class="mute-btn" id="muteBtn" title="Mute sound" aria-label="Mute sound">🔊</button>
+      <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" step="1" value="50" aria-label="Volume">
+    </div>
+  </header>
+
+  <div class="controls" id="controlsBar">
+    <div class="control-group">
+      <div class="seg" id="modeSeg">
+        <button data-mode="words" class="active">words</button>
+        <button data-mode="paragraph">paragraph</button>
+        <button data-mode="numbers">numbers</button>
+        <button data-mode="pangram" title="real words, every letter used an equal number of times">pangram</button>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="time-control">
+        <label for="timeRange">time</label>
+        <input type="range" id="timeRange" min="15" max="300" step="15" value="60">
+        <span class="time-value" id="timeValue">60s</span>
+      </div>
+    </div>
+    <div class="control-group">
+      <button class="restart-btn" id="restartBtn">↻ restart</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="hud">
+      <div class="metric timer"><b id="timerDisplay">60</b>seconds left</div>
+      <div class="metric"><b id="wpmDisplay">0</b>wpm</div>
+      <div class="metric"><b id="accDisplay">100%</b>accuracy</div>
+    </div>
+    <div class="panel">
+      <div class="text-display" id="textDisplay" tabindex="0"></div>
+      <div class="focus-hint" id="focusHint"><span>click here and start typing</span></div>
+    </div>
+    <input type="text" class="hidden-input" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  </div>
+
+  <div class="results" id="results">
+    <div class="panel">
+      <div class="results-grid">
+        <div class="stat"><b id="resWpm">0</b><span>wpm</span></div>
+        <div class="stat"><b id="resAcc">0%</b><span>accuracy</span></div>
+        <div class="stat"><b id="resChars">0</b><span>characters</span></div>
+        <div class="stat"><b id="resMistyped">0</b><span>mistyped</span></div>
+        <div class="stat"><b id="resTime">0s</b><span>time</span></div>
+      </div>
+      <div class="mistyped-section" id="mistypedSection">
+        <h3>mistyped letters</h3>
+        <div class="mistyped-chips" id="mistypedChips"></div>
+      </div>
+      <div class="results-foot">
+        <button class="try-again" id="tryAgainBtn">type again</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>multiple of 15s · max 5 minutes</footer>
+</div>
+
+<script>
+(function(){
+
+  // ---------- word / text pools ----------
+  var WORDS = ("the be to of and a in that have it for not on with he as you do at this but his by from "+
+    "they we say her she or an will my one all would there their what so up out if about who get which go "+
+    "me when make can like time no just him know take people into year your good some could them see other "+
+    "than then now look only come its over think also back after use two how our work first well way even "+
+    "new want because any these give day most us water world house small place sound find part right great "+
+    "thing name help low line turn cause same mean move city try kind hand picture again change off play air "+
+    "away animal point page letter mother answer found study still learn should high every near add food "+
+    "between own below country plant last school father keep tree never start earth eye light thought head "+
+    "under story saw left few while along might close something seem next hard open example begin life "+
+    "always those both paper together got group often run important until children side feet car mile night "+
+    "walk white sea began grow took river four carry state once book hear stop without second later miss "+
+    "idea enough eat face watch far indian really almost let above girl sometimes mountain cut young talk "+
+    "soon list song being leave family").split(" ");
+
+  var PARAGRAPH_FRAGMENTS = [
+    "The meeting is scheduled for 9:30 AM, and it will cover three topics: budget, staffing, and timeline.",
+    "In 2024, the company reported revenues of $1,250,000, an increase of 12% over the previous year.",
+    "There are 7 continents, 5 oceans, and roughly 195 countries on planet Earth.",
+    "Please remember: bring your ID, arrive by 8:00, and park in lot 3.",
+    "The recipe calls for 2 cups of flour, 1 teaspoon of salt, and 3 eggs.",
+    "According to the report, 45% of users preferred option A, while 55% chose option B.",
+    "Chapter 4 covers three sections: introduction, methodology, and results.",
+    "The train departs at 6:15, stops at 2 stations, and arrives by 8:45.",
+    "Our team scored 21 points in the first half and 17 in the second, totaling 38.",
+    "The instructions were simple: measure twice, cut once, and label everything.",
+    "Set the oven to 375 degrees, bake for 25 minutes, and let it cool for 10.",
+    "The survey included 3 questions, 150 respondents, and took about 5 minutes to complete.",
+    "Turn left at Elm Street, continue for 2 miles, then merge onto Route 9.",
+    "The invoice total came to $482.50, due within 30 days of receipt.",
+    "Three factors matter most: speed, accuracy, and consistency.",
+    "The library is open Monday through Friday, 9 to 6, and Saturdays, 10 to 2.",
+    "Version 2.3 fixed 14 bugs, added 5 features, and improved load time by 20%.",
+    "The hike is 8 miles round trip, gains 1,200 feet, and takes about 4 hours."
+  ];
+
+  var ALPHABET = "abcdefghijklmnopqrstuvwxyz".split("");
+
+  // Real, meaningful words — including ones that carry the rarer letters
+  // (q, x, z, j, v, w, y, k) so every letter can actually be reached.
+  var PANGRAM_WORDS = ("jump join joke jazz juice major enjoy subject object just job injury jungle "+
+    "quick quiet quite equal request quality liquid square quarter frequent equip unique quote "+
+    "exact excite exchange expect extra fix fox next exam example exit mix relax index complex "+
+    "zero size prize seize zone dozen citizen organize amazing puzzle freeze zebra "+
+    "very give have live move love value voice visit various event never level every evidence avoid "+
+    "want water world week work would way who what when where why window wonder warm "+
+    "yes year yellow young yard yesterday system study many only story empty energy "+
+    "keep know make take kind kitchen market weekend break risk skill thank talk key "+
+    "the be to of and a in that have it for not on with he as you do at this but his by from "+
+    "they we say her she or an will my one all there their what so up out if about who get which go "+
+    "me when like time no just him know take people into year your good some could them see other "+
+    "than then now look only come its over think also back after use two how our work first well way "+
+    "new want because any these give day most us water world house small place sound find part right "+
+    "great thing name help low line turn cause same mean move city try kind hand picture again change "+
+    "off play air away animal point page letter mother answer found study still learn should high "+
+    "every near add food between own below country plant last school father tree never start earth "+
+    "eye light thought head under story saw left few while along might close something seem next hard "+
+    "open example begin life always those both paper together got group often run important until "+
+    "children side feet car mile night walk white sea began grow took river four carry state once "+
+    "book hear stop without second later miss idea enough eat face watch far really almost let above "+
+    "girl sometimes mountain cut young talk soon list song being leave family").split(" ");
+  var PANGRAM_POOL = Array.from(new Set(PANGRAM_WORDS));
+
+  var paragraphBag = makeBag(PARAGRAPH_FRAGMENTS);
+
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function pick(arr){ return arr[randInt(0,arr.length-1)]; }
+
+  // A shuffled "bag": deals out every item in the pool once, in random
+  // order, before any item repeats. Persists across resetTest() calls (it's
+  // declared outside state, at module scope) so hitting restart/try-again
+  // always advances to fresh, unseen fragments instead of a fresh random
+  // draw that could coincidentally land on the same paragraph again.
+  function makeBag(pool){
+    var bag = { queue: [], last: null };
+    function refill(){
+      var arr = pool.slice();
+      for(var i=arr.length-1;i>0;i--){
+        var j = Math.floor(Math.random()*(i+1));
+        var tmp=arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+      }
+      // avoid the new queue starting with the same item that just ended the last one
+      if(arr.length>1 && arr[0]===bag.last){
+        var k = 1 + Math.floor(Math.random()*(arr.length-1));
+        var t=arr[0]; arr[0]=arr[k]; arr[k]=t;
+      }
+      bag.queue = arr;
+    }
+    bag.next = function(){
+      if(bag.queue.length===0) refill();
+      var item = bag.queue.shift();
+      bag.last = item;
+      return item;
+    };
+    return bag;
+  }
+
+  function wordLetterCounts(word){
+    var counts = {};
+    for(var i=0;i<word.length;i++){
+      var c = word[i];
+      counts[c] = (counts[c]||0) + 1;
+    }
+    return counts;
+  }
+
+  // Standard English letter-frequency table (rough %), used to decide how
+  // aggressively to chase a letter (rare letters get boosted priority) and
+  // how hard to discourage piling on more of an already-common letter.
+  var LETTER_FREQ = {e:12.7,t:9.1,a:8.2,o:7.5,i:7.0,n:6.7,s:6.3,h:6.1,r:6.0,
+    d:4.3,l:4.0,c:2.8,u:2.8,m:2.4,w:2.4,f:2.2,g:2.0,y:2.0,p:1.9,b:1.5,
+    v:1.0,k:0.8,j:0.15,x:0.15,q:0.1,z:0.07};
+
+  // Picks real words one at a time. Each step scores every candidate word:
+  // letters still under target add to the score (rare letters weighted extra
+  // heavily so they don't get crowded out), letters already past target
+  // subtract from it (common letters weighted extra so they stop piling up) —
+  // so the running text converges toward fair letter coverage while staying
+  // real, whole words. `usedSet` tracks every word already placed anywhere in
+  // the current test (not just this batch), so a word is never repeated —
+  // pass 1 only considers words not yet used; pass 2 (reuse) only ever
+  // kicks in once every word in the pool has genuinely been used once.
+  // Crucially, the pick each step is NOT the single best-scoring word —
+  // that would be near-deterministic (same starting letter deficits every
+  // retry -> same word every time). Instead we weight-randomly pick among
+  // the top handful of candidates, so the balancing goal is still honored
+  // but retries produce genuinely different text.
+  // Perfect mathematical equality isn't possible with real English words
+  // (e.g. "e" naturally appears far more than "q" or "z"), but this keeps
+  // every letter solidly represented rather than left out.
+  function genPangramBalanced(nWordsApprox, usedSet){
+    var avgLen = PANGRAM_POOL.reduce(function(s,w){ return s+w.length; },0) / PANGRAM_POOL.length;
+    var targetPerLetter = (nWordsApprox * avgLen) / 26;
+
+    var current = {};
+    ALPHABET.forEach(function(l){ current[l] = 0; });
+    var result = [];
+    var lastWord = state.pangramLastWord || null;
+
+    function scoreWord(candidate){
+      var lc = wordLetterCounts(candidate);
+      var score = 0;
+      for(var letter in lc){
+        var deficit = targetPerLetter - current[letter];
+        var f = LETTER_FREQ[letter] / 12.7; // 0..1, 1 = very common
+        if(deficit > 0){
+          var rewardMult = 1 + (1 - f) * 2.5;
+          score += deficit * lc[letter] * rewardMult;
+        } else {
+          var penaltyMult = 0.3 + f * 1.2;
+          score += deficit * lc[letter] * penaltyMult;
+        }
+      }
+      return score;
+    }
+
+    // Picks a word at random from `candidates` (array of {word, score}),
+    // weighted toward the higher scores, restricted to the top slice so
+    // low-quality picks are never chosen but ties/near-ties get real variety.
+    function weightedPick(candidates){
+      candidates.sort(function(a,b){ return b.score - a.score; });
+      var top = candidates.slice(0, Math.min(candidates.length, 6));
+      var minScore = top[top.length - 1].score;
+      var weights = top.map(function(c){ return (c.score - minScore) + 1; });
+      var total = weights.reduce(function(s,w){ return s + w; }, 0);
+      var r = Math.random() * total;
+      for(var i=0; i<top.length; i++){
+        r -= weights[i];
+        if(r <= 0) return top[i].word;
+      }
+      return top[top.length - 1].word;
+    }
+
+    for(var n=0; n<nWordsApprox; n++){
+      // Pass 1: only words never used anywhere in this test.
+      var freshCandidates = [];
+      for(var p=0; p<PANGRAM_POOL.length; p++){
+        var candidate = PANGRAM_POOL[p];
+        if(candidate === lastWord || usedSet[candidate]) continue;
+        freshCandidates.push({ word: candidate, score: scoreWord(candidate) });
+      }
+
+      var bestWord;
+      if(freshCandidates.length > 0){
+        bestWord = weightedPick(freshCandidates);
+      } else {
+        // Pass 2: the pool of fresh words is exhausted — only now allow
+        // reuse (still avoiding an immediate back-to-back repeat).
+        var reuseCandidates = [];
+        for(var p2=0; p2<PANGRAM_POOL.length; p2++){
+          var candidate2 = PANGRAM_POOL[p2];
+          if(candidate2 === lastWord) continue;
+          reuseCandidates.push({ word: candidate2, score: scoreWord(candidate2) });
+        }
+        bestWord = reuseCandidates.length > 0 ? weightedPick(reuseCandidates) : pick(PANGRAM_POOL);
+      }
+
+      var counts = wordLetterCounts(bestWord);
+      for(var letter2 in counts){ current[letter2] += counts[letter2]; }
+      usedSet[bestWord] = true;
+      result.push(bestWord);
+      lastWord = bestWord;
+    }
+    state.pangramLastWord = lastWord;
+    return result;
+  }
+
+  function genWords(n){
+    var out=[];
+    var last=null;
+    for(var i=0;i<n;i++){
+      var w=pick(WORDS);
+      var guard=0;
+      while(w===last && guard<5){ w=pick(WORDS); guard++; }
+      out.push(w);
+      last=w;
+    }
+    return out;
+  }
+  function genParagraph(n){
+    var out=[];
+    while(out.length<n){
+      var frag=paragraphBag.next();
+      out=out.concat(frag.split(" "));
+    }
+    return out;
+  }
+  function genNumbers(n){
+    var out=[];
+    for(var i=0;i<n;i++){
+      var len=randInt(1,5);
+      var s="";
+      for(var j=0;j<len;j++){ s += (j===0? randInt(1,9): randInt(0,9)); }
+      out.push(s);
+    }
+    return out;
+  }
+  function genTokens(mode,n){
+    if(mode==="words") return genWords(n);
+    if(mode==="numbers") return genNumbers(n);
+    if(mode==="pangram") return genPangramBalanced(n, state.pangramUsed);
+    return genParagraph(n);
+  }
+
+  // ---------- state ----------
+  var state = {
+    mode: "words",
+    duration: 60,
+    tokens: [],
+    chars: [],
+    wordSpanRanges: [],
+    currentIndex: 0,
+    typedLog: [],
+    started: false,
+    finished: false,
+    timeLeft: 60,
+    timerInterval: null,
+    totalTyped: 0,
+    correctTyped: 0,
+    mistypes: {},
+    muted: false,
+    volume: 0.5,       // 0..1, drives the slider
+    volumeBeforeMute: 0.5,
+    pangramUsed: {},
+    pangramLastWord: null
+  };
+
+  // ---------- DOM refs ----------
+  var textDisplay = document.getElementById('textDisplay');
+  var hiddenInput = document.getElementById('hiddenInput');
+  var focusHint = document.getElementById('focusHint');
+  var timerDisplay = document.getElementById('timerDisplay');
+  var wpmDisplay = document.getElementById('wpmDisplay');
+  var accDisplay = document.getElementById('accDisplay');
+  var stage = document.getElementById('stage');
+  var resultsEl = document.getElementById('results');
+  var muteBtn = document.getElementById('muteBtn');
+  var volumeSlider = document.getElementById('volumeSlider');
+  var timeRange = document.getElementById('timeRange');
+  var timeValue = document.getElementById('timeValue');
+  var modeSeg = document.getElementById('modeSeg');
+  var restartBtn = document.getElementById('restartBtn');
+  var tryAgainBtn = document.getElementById('tryAgainBtn');
+
+  var caretEl = null;
+
+  // ---------- build / render text ----------
+  function buildTokens(initial){
+    var count = initial ? 120 : 80;
+    var newTokens = genTokens(state.mode, count);
+    state.tokens = state.tokens.concat(newTokens);
+    rebuildCharsFromTokens();
+  }
+
+  function rebuildCharsFromTokens(){
+    state.chars = [];
+    state.wordSpanRanges = [];
+    for(var w=0; w<state.tokens.length; w++){
+      var word = state.tokens[w];
+      var start = state.chars.length;
+      for(var i=0;i<word.length;i++){
+        state.chars.push({ch:word[i], wordIdx:w});
+      }
+      var end = state.chars.length - 1;
+      state.wordSpanRanges.push([start,end]);
+      if(w < state.tokens.length-1){
+        state.chars.push({ch:' ', wordIdx:w, isSpace:true});
+      }
+    }
+  }
+
+  function renderText(){
+    var html = '';
+    for(var w=0; w<state.tokens.length; w++){
+      html += '<span class="word" data-w="'+w+'">';
+      var word = state.tokens[w];
+      for(var i=0;i<word.length;i++){
+        var idx = charIndexFor(w,i);
+        html += '<span class="char" data-i="'+idx+'">'+escapeHtml(word[i])+'</span>';
+      }
+      html += '</span>';
+      if(w < state.tokens.length-1){
+        var spaceIdx = state.wordSpanRanges[w][1]+1;
+        html += '<span class="char space" data-i="'+spaceIdx+'"> </span>';
+      }
+    }
+    textDisplay.innerHTML = html;
+    caretEl = document.createElement('div');
+    caretEl.className = 'caret';
+    textDisplay.appendChild(caretEl);
+    setupTextHeight();
+    positionCaret();
+  }
+
+  // Lock the box to an exact whole number of lines so a row is
+  // never sliced in half — every visible word is always shown complete.
+  function setupTextHeight(){
+    var cs = getComputedStyle(textDisplay);
+    var lh = parseFloat(cs.lineHeight);
+    if(!lh || isNaN(lh)){ lh = parseFloat(cs.fontSize) * 1.9; }
+    var lines = window.innerWidth <= 560 ? 5 : 4;
+    textDisplay.style.height = (lh * lines) + 'px';
+    textDisplay.dataset.lh = lh;
+  }
+
+  function charIndexFor(w,i){
+    return state.wordSpanRanges[w][0] + i;
+  }
+  function escapeHtml(c){
+    if(c==='&') return '&amp;';
+    if(c==='<') return '&lt;';
+    if(c==='>') return '&gt;';
+    return c;
+  }
+
+  function getCharSpan(i){
+    return textDisplay.querySelector('.char[data-i="'+i+'"]');
+  }
+
+  function ensureMoreTokens(){
+    if(state.currentIndex > state.tokens.length - 25){
+      buildTokens(false);
+      appendNewWordsToDOM();
+    }
+  }
+
+  function appendNewWordsToDOM(){
+    var scrollBefore = textDisplay.scrollTop;
+    renderText();
+    reapplyTypedStyles();
+    textDisplay.scrollTop = scrollBefore;
+  }
+
+  function reapplyTypedStyles(){
+    for(var i=0;i<state.currentIndex;i++){
+      var span = getCharSpan(i);
+      if(!span) continue;
+      if(state.typedLog[i] === true) span.classList.add('correct');
+      else if(state.typedLog[i] === false) span.classList.add('incorrect');
+    }
+    markDoneWords();
+    positionCaret();
+    scrollToCaret();
+  }
+
+  function markDoneWords(){
+    var words = textDisplay.querySelectorAll('.word');
+    words.forEach(function(wEl){
+      var w = parseInt(wEl.getAttribute('data-w'),10);
+      var range = state.wordSpanRanges[w];
+      if(range && state.currentIndex > range[1]+1){
+        wEl.classList.add('done');
+      } else {
+        wEl.classList.remove('done');
+      }
+    });
+  }
+
+  function positionCaret(){
+    if(!caretEl) return;
+    var span = getCharSpan(state.currentIndex);
+    var containerRect = textDisplay.getBoundingClientRect();
+    if(span){
+      var r = span.getBoundingClientRect();
+      caretEl.style.height = (r.height) + 'px';
+      caretEl.style.left = (r.left - containerRect.left) + 'px';
+      caretEl.style.top = (r.top - containerRect.top) + 'px';
+    } else {
+      var last = getCharSpan(state.currentIndex-1);
+      if(last){
+        var lr = last.getBoundingClientRect();
+        caretEl.style.height = lr.height + 'px';
+        caretEl.style.left = (lr.right - containerRect.left) + 'px';
+        caretEl.style.top = (lr.top - containerRect.top) + 'px';
+      }
+    }
+  }
+
+  function scrollToCaret(){
+    var span = getCharSpan(state.currentIndex) || getCharSpan(state.currentIndex-1);
+    if(!span) return;
+    var lh = parseFloat(textDisplay.dataset.lh) || 40;
+    var containerRect = textDisplay.getBoundingClientRect();
+    var r = span.getBoundingClientRect();
+    var relativeTop = (r.top - containerRect.top) + textDisplay.scrollTop;
+    var lineIndex = Math.round(relativeTop / lh);
+    var visibleLines = Math.max(1, Math.round(textDisplay.clientHeight / lh));
+    var currentTopLine = Math.round(textDisplay.scrollTop / lh);
+
+    if(lineIndex < currentTopLine){
+      textDisplay.scrollTop = lineIndex * lh;
+    } else if(lineIndex > currentTopLine + visibleLines - 1){
+      textDisplay.scrollTop = (lineIndex - visibleLines + 1) * lh;
+    }
+  }
+
+  // ---------- sound: user-provided click sample ----------
+  // A real click recording, embedded as a data URI so the file stays a
+  // single self-contained HTML document. Decoded once into a Web Audio
+  // buffer; every click then just spins up a cheap new buffer-source node,
+  // which is the pattern that behaves most reliably across browsers
+  // (including mobile Safari) for rapid, overlapping UI sounds — pooled
+  // <audio> elements can be flaky for that. A small <audio>-pool fallback
+  // covers the rare case Web Audio isn't available.
+  var CLICK_SOUND_SRC = "data:audio/mpeg;base64,SUQzBAAAAAABAFRYWFgAAAASAAADbWFqb3JfYnJhbmQAZGFzaABUWFhYAAAAEQAAA21pbm9yX3ZlcnNpb24AMABUWFhYAAAAHAAAA2NvbXBhdGlibGVfYnJhbmRzAGlzbzZtcDQxAFRTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//vgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAJAAAo0AAzMzMzMzMzMzMzM0xMTExMTExMTExMZmZmZmZmZmZmZmZ/f39/f39/f39/f5mZmZmZmZmZmZmZs7Ozs7Ozs7Ozs7PMzMzMzMzMzMzMzObm5ubm5ubm5ubm//////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAPMAAAAAAAAKNAsxF/IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//vgZAAP8AAAaQAAAAgAAA0gAAABAAABpBQAACAAADSCgAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUgAAAAAABAEAAICD/oX2JBhMIlw/34c03wQw6CRb/g9xDLqVDy5zsYA4wOeh7AMkY6uRQmBqga+D8AdNkRAZ6Tj+IBh2xoCywMXhAgNkrKQNRobQM5BSPjFJYXGPRLAadRxgZB2xgciVLgeoVngZNi9/idxtDsIOblADgeq0Ds2fcDT8hgDF2QMDASCwDCYA7+aEiTwuAYA4yKAYKQOgMCkAweDeAyHCEA1XDYAw3LMA4OJu/5PENFLifxzES0X1AbViuAYWS7Aa+j1AY+VLgbOzZgZGiGAZrhRgZBz1AbkEZf/QI8cY2h5FxlcmCoQRYHTo0gGrNMYGFQcgGdcgIGAIOAGFICgGL06AGR55IHg10oHydNoG2hZX//cig+RS4pcdA4B4ImXG8DJSXcDH8IgDACEECQIgMZpEQMVI7AM2Q/gM/BBgMC4NwMHANAMIgIgagZAwPgDAwTgRBqAL/////////AYAYBgmAMGXyGGROJiyCCTAihUHPIO5vDAAAAAISSQ/4Fh4w8C5zELb+/2CIQHTExMfl0R3+qe0ZucIpu5m5/7rtIOw9TUz4lgv/2mLge8zKgqjYeNOMHMR3//0NEWF/roMDYHA1aCQjDJGKM4okT///e2RvxAsPGt8TkYzIcZjhCyGXADYYYJGX///7BHtg93KOwZ8RLRr4F//viZP+AC/CKtFZ2wANoMVVIz3gAe7mbP7m+AANzMCVTM6AAeGNKOaYHgVRgFANCEFP////7cilrjtngR+zBtAvMZkHQwUiuzQ1J7NkMqkxkgODKRHb//////l8xLJNP0ljPzMfIBMJoooy4hgDRMHoMVEXELA2GCACMYHAABgJgD///////+WNvLGnor8sikrBoGwoF6Yi4S5jNhqmA0CYOACgkF8wDQ1jE+CuMfoPwwOQWf/////////7d/mfcP/////zAkAyMCMGUwlQdRIDIw5QfwqAorDL++4mNuH7//////////////////////////////////////g/G+xunt2N59w+xn8vH8jgcCgcDgcDgcDgcDgGQkoBKDNBAdEDBAFYxpA4a9NGDjJpJcFRIxYMOsXjAxszwJLkBgmISIFBRtTAoCMNBxTFH0wOATHxsNOJJKEvQYzIaeBEEzCA7MpA42QpDPxsMoBgwsCTIqFNAk0OCJjZCGmhIZfDRjUuGThQWcMPBI1MYjMsZMJgUsgX3MolEwwXzFQKAQDMJhwcDKdxzdLm+VGZPF5ikEmOx+NFIxyajDwoFguYIDRgsPkxOMNmQxMnzEYyMAgcxGIhIBGIgYYZG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";
+  var audioCtx = null;
+  var clickBuffer = null;
+  var bufferLoading = null;
+
+  // Decode the embedded click sample into a reusable AudioBuffer, once.
+  function loadClickBuffer(ctx){
+    if(clickBuffer || bufferLoading) return;
+    var base64 = CLICK_SOUND_SRC.split(',')[1];
+    var binary = atob(base64);
+    var bytes = new Uint8Array(binary.length);
+    for(var i=0; i<binary.length; i++){ bytes[i] = binary.charCodeAt(i); }
+    bufferLoading = ctx.decodeAudioData(bytes.buffer, function(buffer){
+      clickBuffer = buffer;
+      bufferLoading = null;
+    }, function(){
+      bufferLoading = null; // decode failed — playClick() will use the fallback pool
+    });
+  }
+
+  // Unlocking on pointerdown (fires just before click) rather than waiting
+  // for a full click gives decodeAudioData a small head start, so the very
+  // first click is more likely to have sound ready in time.
+  function unlockAudio(){
+    if(!audioCtx){
+      try{
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }catch(e){ audioCtx = null; return; }
+    }
+    if(audioCtx.state === 'suspended'){ audioCtx.resume(); }
+    loadClickBuffer(audioCtx);
+  }
+  document.addEventListener('pointerdown', unlockAudio, {once:true});
+  document.addEventListener('keydown', unlockAudio, {once:true});
+
+  // GainNode can amplify past 1.0, unlike audio.volume — the source clip is
+  // fairly quiet on average, so the top of the slider maps to a boosted
+  // gain rather than plain unity, while staying under clipping headroom.
+  var VOLUME_MAX_GAIN = 1.5;
+
+  // Fallback pool of <audio> elements — only used if Web Audio is
+  // unavailable in this browser or the sample fails to decode.
+  var CLICK_POOL_SIZE = 6;
+  var clickPool = [];
+  var clickPoolIndex = 0;
+  function playClickFallback(){
+    if(!clickPool.length){
+      for(var i=0; i<CLICK_POOL_SIZE; i++){
+        var a = new Audio(CLICK_SOUND_SRC);
+        a.preload = 'auto';
+        clickPool.push(a);
+      }
+    }
+    var a = clickPool[clickPoolIndex];
+    clickPoolIndex = (clickPoolIndex + 1) % clickPool.length;
+    a.volume = Math.min(1, state.volume * VOLUME_MAX_GAIN); // audio.volume caps at 1
+    try{
+      a.currentTime = 0;
+      var p = a.play();
+      if(p && p.catch) p.catch(function(){});
+    }catch(e){}
+  }
+
+  function playClick(){
+    if(state.muted || state.volume <= 0) return;
+    unlockAudio();
+    if(audioCtx && clickBuffer){
+      try{
+        var source = audioCtx.createBufferSource();
+        source.buffer = clickBuffer;
+        var gain = audioCtx.createGain();
+        gain.gain.value = state.volume * VOLUME_MAX_GAIN;
+        source.connect(gain);
+        gain.connect(audioCtx.destination);
+        source.start(0);
+        return;
+      }catch(e){ /* fall through to the <audio> pool below */ }
+    }
+    playClickFallback();
+  }
+
+  // ---------- timer ----------
+  function startTimer(){
+    state.timerInterval = setInterval(function(){
+      state.timeLeft--;
+      timerDisplay.textContent = state.timeLeft;
+      updateLiveStats();
+      if(state.timeLeft <= 0){
+        finishTest();
+      }
+    },1000);
+  }
+
+  function updateLiveStats(){
+    var elapsedSec = state.duration - state.timeLeft;
+    var minutes = Math.max(elapsedSec,1)/60;
+    var wpm = Math.round((state.correctTyped/5)/minutes);
+    wpmDisplay.textContent = isFinite(wpm) && wpm>0 ? wpm : 0;
+    var acc = state.totalTyped>0 ? Math.round((state.correctTyped/state.totalTyped)*100) : 100;
+    accDisplay.textContent = acc + '%';
+  }
+
+  // ---------- typing handlers ----------
+  function onFocusStage(){
+    hiddenInput.focus();
+    focusHint.style.display = 'none';
+  }
+  textDisplay.addEventListener('click', onFocusStage);
+  focusHint.addEventListener('click', onFocusStage);
+  hiddenInput.addEventListener('blur', function(){
+    if(!state.finished) focusHint.style.display = 'flex';
+  });
+
+  hiddenInput.addEventListener('keydown', function(e){
+    if(state.finished) return;
+
+    if(e.key === 'Backspace'){
+      e.preventDefault();
+      if(state.currentIndex > 0){
+        state.currentIndex--;
+        var span = getCharSpan(state.currentIndex);
+        if(span){ span.classList.remove('correct','incorrect'); }
+        markDoneWords();
+        positionCaret();
+        scrollToCaret();
+      }
+      return;
+    }
+
+    if(e.key.length !== 1) return;
+    e.preventDefault();
+
+    if(!state.started){
+      state.started = true;
+      startTimer();
+    }
+
+    var expected = state.chars[state.currentIndex];
+    if(!expected) return;
+    var typedChar = e.key;
+    var isCorrect = typedChar === expected.ch;
+
+    var span = getCharSpan(state.currentIndex);
+    if(span){
+      span.classList.add(isCorrect ? 'correct' : 'incorrect');
+    }
+    state.typedLog[state.currentIndex] = isCorrect;
+    state.totalTyped++;
+    if(isCorrect){
+      state.correctTyped++;
+    } else {
+      var key = expected.ch === ' ' ? 'space' : expected.ch;
+      state.mistypes[key] = (state.mistypes[key] || 0) + 1;
+    }
+
+    state.currentIndex++;
+    playClick();
+    markDoneWords();
+    ensureMoreTokens();
+    positionCaret();
+    scrollToCaret();
+    updateLiveStats();
+  });
+
+  // ---------- finish / results ----------
+  function finishTest(){
+    state.finished = true;
+    clearInterval(state.timerInterval);
+    hiddenInput.blur();
+    stage.style.display = 'none';
+    document.getElementById('controlsBar').style.display = 'none';
+
+    var elapsedMin = state.duration/60;
+    var wpm = Math.round((state.correctTyped/5)/elapsedMin);
+    var acc = state.totalTyped>0 ? Math.round((state.correctTyped/state.totalTyped)*100) : 100;
+
+    document.getElementById('resWpm').textContent = isFinite(wpm)&&wpm>0 ? wpm : 0;
+    document.getElementById('resAcc').textContent = acc + '%';
+    document.getElementById('resChars').textContent = state.correctTyped + '/' + state.totalTyped;
+    document.getElementById('resMistyped').textContent = (state.totalTyped - state.correctTyped);
+    document.getElementById('resTime').textContent = state.duration + 's';
+
+    renderMistypedChips();
+
+    resultsEl.classList.add('show');
+  }
+
+  function renderMistypedChips(){
+    var container = document.getElementById('mistypedChips');
+    var entries = Object.keys(state.mistypes).map(function(k){
+      return { letter:k, count:state.mistypes[k] };
+    });
+    entries.sort(function(a,b){ return b.count - a.count; });
+
+    if(entries.length === 0){
+      container.innerHTML = '<div class="mistyped-empty">no mistakes — flawless</div>';
+      return;
+    }
+
+    var html = '';
+    entries.forEach(function(e){
+      var label = e.letter === 'space' ? 'space' : escapeHtml(e.letter);
+      html += '<div class="chip"><span class="letter">'+label+'</span><span class="count">×'+e.count+'</span></div>';
+    });
+    container.innerHTML = html;
+  }
+
+  // ---------- setup / reset ----------
+  function resetTest(){
+    clearInterval(state.timerInterval);
+    state.tokens = [];
+    state.chars = [];
+    state.wordSpanRanges = [];
+    state.currentIndex = 0;
+    state.typedLog = [];
+    state.started = false;
+    state.finished = false;
+    state.timeLeft = state.duration;
+    state.totalTyped = 0;
+    state.correctTyped = 0;
+    state.mistypes = {};
+    state.pangramUsed = {};
+    state.pangramLastWord = null;
+
+    timerDisplay.textContent = state.timeLeft;
+    wpmDisplay.textContent = 0;
+    accDisplay.textContent = '100%';
+
+    resultsEl.classList.remove('show');
+    document.getElementById('resMistyped').textContent = 0;
+    document.getElementById('mistypedChips').innerHTML = '';
+    stage.style.display = 'block';
+    document.getElementById('controlsBar').style.display = 'flex';
+
+    buildTokens(true);
+    renderText();
+    focusHint.style.display = 'flex';
+    hiddenInput.value = '';
+  }
+
+  // ---------- controls wiring ----------
+  modeSeg.addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    modeSeg.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    state.mode = btn.getAttribute('data-mode');
+    resetTest();
+  });
+
+  timeRange.addEventListener('input', function(){
+    state.duration = parseInt(timeRange.value,10);
+    timeValue.textContent = state.duration + 's';
+    resetTest();
+  });
+
+  // Icon reflects both mute state and how loud the slider is set —
+  // matches the pattern people already know from OS/media-player volume
+  // controls (silent / low / full speaker glyphs).
+  function updateVolumeUI(){
+    var pct = Math.round(state.volume * 100);
+    volumeSlider.value = pct;
+    var silent = state.muted || state.volume <= 0;
+    muteBtn.classList.toggle('active', silent);
+    muteBtn.textContent = silent ? '🔇' : (state.volume < 0.5 ? '🔉' : '🔊');
+    muteBtn.setAttribute('aria-label', silent ? 'Unmute sound' : 'Mute sound');
+    volumeSlider.setAttribute('aria-valuetext', pct + '%');
+  }
+
+  muteBtn.addEventListener('click', function(){
+    if(state.muted || state.volume <= 0){
+      state.muted = false;
+      state.volume = state.volumeBeforeMute > 0 ? state.volumeBeforeMute : 0.7;
+    } else {
+      state.volumeBeforeMute = state.volume;
+      state.muted = true;
+    }
+    updateVolumeUI();
+    unlockAudio();
+  });
+
+  // Live-updates as the thumb is dragged; dragging to 0 mutes, dragging
+  // back up automatically unmutes — no need to also hit the icon.
+  volumeSlider.addEventListener('input', function(){
+    var v = parseInt(volumeSlider.value, 10) / 100;
+    state.volume = v;
+    state.muted = (v <= 0);
+    if(v > 0) state.volumeBeforeMute = v;
+    updateVolumeUI();
+  });
+  // Fires once on release — a short preview click at the new level, the
+  // same feedback pattern OS volume sliders give you.
+  volumeSlider.addEventListener('change', function(){
+    unlockAudio();
+    playClick();
+  });
+
+  restartBtn.addEventListener('click', resetTest);
+  tryAgainBtn.addEventListener('click', resetTest);
+
+  // ---------- global click feedback ----------
+  // Any real UI click — switching modes, restart, try again, mute toggle,
+  // or tapping into the typing area to focus it — gets the same click
+  // sound as typing does, so the whole interface feels consistent.
+  // Delegated on document so new controls automatically pick it up too.
+  document.addEventListener('click', function(e){
+    var target = e.target.closest('button, .text-display, .focus-hint');
+    if(target) playClick();
+  });
+
+  updateVolumeUI();
+
+  window.addEventListener('resize', function(){
+    setupTextHeight();
+    positionCaret();
+    scrollToCaret();
+  });
+
+  // ---------- init ----------
+  timeValue.textContent = state.duration + 's';
+  resetTest();
+
+})();
+</script>
+</body>
+</html>
