@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>typedot-typing test</title>
+<title>TYPE — a typing test</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -72,6 +72,11 @@
   .mute-btn:hover{border-color:var(--accent-dim);color:var(--paper);}
   .mute-btn:active{transform:scale(.93);}
   .mute-btn.active{color:var(--accent);border-color:var(--accent-dim);}
+
+  .header-actions{display:flex;align-items:center;gap:10px;}
+  .dev-link{
+    text-decoration:none;font-family:inherit;font-size:13px;font-weight:600;
+  }
 
   .volume-control{
     display:flex;align-items:center;gap:11px;
@@ -290,10 +295,118 @@
   @media (prefers-reduced-motion: reduce){
     .caret{animation:none;}
   }
+
+  /* ---------- developer page ---------- */
+  #pageDev{width:100%;}
+  #pageDev .wrap{max-width:960px;margin:0 auto;padding:0 24px;}
+  #pageDev nav{
+    display:flex;align-items:center;justify-content:space-between;padding:22px 0;
+    border-bottom:1px solid var(--border-soft);
+  }
+  #pageDev nav .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--paper);}
+  #pageDev nav .brand .glyph{
+    width:30px;height:30px;border-radius:7px;background:linear-gradient(155deg,var(--panel-2),var(--panel));
+    border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+    font-size:14px;color:var(--accent);
+  }
+  #pageDev nav .brand b{font-size:16px;font-weight:800;letter-spacing:2px;}
+  #pageDev .navlinks{display:flex;gap:28px;font-size:12.5px;color:var(--pending);}
+  #pageDev .navlinks a{color:inherit;text-decoration:none;letter-spacing:.4px;transition:color .18s;}
+  #pageDev .navlinks a:hover{color:var(--paper);}
+  #pageDev .navlinks a.active{color:var(--accent);}
+
+  #pageDev .hero{padding:60px 0 56px;text-align:center;border-bottom:1px solid var(--border-soft);}
+  #pageDev .eyebrow{
+    display:inline-block;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--accent);border:1px solid var(--accent-dim);border-radius:999px;
+    padding:6px 16px;margin-bottom:22px;
+  }
+  #pageDev .hero h1{font-size:32px;font-weight:800;letter-spacing:.5px;margin:0 0 16px;line-height:1.3;}
+  #pageDev .hero h1 .accent{color:var(--accent);}
+  #pageDev .hero p{font-size:14.5px;color:var(--pending);max-width:500px;margin:0 auto 28px;line-height:1.7;}
+  #pageDev .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  #pageDev .btn{
+    font-family:inherit;font-size:13px;letter-spacing:.4px;padding:12px 26px;border-radius:999px;
+    text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .12s,border-color .18s,background .18s;
+    cursor:pointer;
+  }
+  #pageDev .btn:active{transform:scale(.97);}
+  #pageDev .btn-primary{background:var(--accent);color:#1d1b17;font-weight:700;border:1px solid var(--accent);}
+  #pageDev .btn-primary:hover{background:var(--accent-2);border-color:var(--accent-2);}
+  #pageDev .btn-ghost{background:transparent;color:var(--paper);border:1px solid var(--border);}
+  #pageDev .btn-ghost:hover{border-color:var(--accent-dim);}
+
+  #pageDev .stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border-soft);}
+  #pageDev .dstat{padding:26px 20px;text-align:center;border-right:1px solid var(--border-soft);}
+  #pageDev .dstat:last-child{border-right:none;}
+  #pageDev .dstat b{display:block;font-size:24px;font-weight:800;color:var(--accent);}
+  #pageDev .dstat span{font-size:10.5px;color:var(--pending);text-transform:uppercase;letter-spacing:1.4px;}
+
+  #pageDev section{padding:52px 0;border-bottom:1px solid var(--border-soft);}
+  #pageDev section:last-of-type{border-bottom:none;}
+  #pageDev .section-head{text-align:center;margin-bottom:38px;}
+  #pageDev .section-head h2{font-size:21px;font-weight:800;margin:0 0 10px;}
+  #pageDev .section-head p{font-size:13px;color:var(--pending);margin:0;}
+
+  #pageDev .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  #pageDev .card{
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    border:1px solid var(--border-soft);border-radius:14px;padding:24px 20px;
+  }
+  #pageDev .card .ic{
+    width:36px;height:36px;border-radius:9px;background:var(--bg-2);border:1px solid var(--border-soft);
+    display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:16px;margin-bottom:14px;
+  }
+  #pageDev .card h3{font-size:14px;margin:0 0 8px;font-weight:700;}
+  #pageDev .card p{font-size:12.5px;color:var(--pending);line-height:1.65;margin:0;}
+
+  #pageDev .profile{
+    display:flex;gap:26px;align-items:center;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    border:1px solid var(--border-soft);border-radius:16px;padding:30px;
+  }
+  #pageDev .avatar{
+    width:70px;height:70px;border-radius:50%;flex-shrink:0;
+    background:linear-gradient(155deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#1d1b17;
+  }
+  #pageDev .profile-body h3{font-size:17px;margin:0 0 4px;}
+  #pageDev .profile-body .role{font-size:12px;color:var(--accent);letter-spacing:.5px;margin-bottom:12px;}
+  #pageDev .profile-body p{font-size:13px;color:var(--pending);line-height:1.7;margin:0 0 16px;max-width:460px;}
+  #pageDev .profile-links{display:flex;gap:10px;flex-wrap:wrap;}
+  #pageDev .profile-links a{
+    font-size:12px;color:var(--paper);border:1px solid var(--border-soft);border-radius:999px;
+    padding:7px 15px;text-decoration:none;transition:border-color .18s,color .18s;
+  }
+  #pageDev .profile-links a:hover{border-color:var(--accent-dim);color:var(--accent);}
+
+  #pageDev .dstack{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  #pageDev .dchip{
+    background:var(--panel);border:1px solid var(--border-soft);border-radius:10px;
+    padding:10px 18px;font-size:12.5px;color:var(--paper);display:flex;align-items:center;gap:8px;
+  }
+  #pageDev .ddot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+
+  #pageDev .cta{text-align:center;padding:48px 0;}
+  #pageDev .cta h2{font-size:20px;font-weight:800;margin:0 0 12px;}
+  #pageDev .cta p{font-size:13px;color:var(--pending);margin:0 0 24px;}
+
+  #pageDev .dev-footer{
+    padding:28px 0;text-align:center;font-size:11px;color:var(--pending);letter-spacing:.4px;
+    margin-top:0;
+  }
+  #pageDev .dev-footer a{color:var(--pending);text-decoration:none;}
+  #pageDev .dev-footer a:hover{color:var(--accent);}
+
+  @media (max-width:640px){
+    #pageDev .grid{grid-template-columns:1fr;}
+    #pageDev .stats{grid-template-columns:repeat(2,1fr);}
+    #pageDev .profile{flex-direction:column;text-align:center;}
+  }
 </style>
 </head>
 <body>
-<div class="app">
+<div class="app" id="pageTest">
 
   <header>
     <div class="brand">
@@ -303,9 +416,12 @@
         <div class="tag">typing test</div>
       </div>
     </div>
-    <div class="volume-control">
-      <button class="mute-btn" id="muteBtn" title="Mute sound" aria-label="Mute sound">🔊</button>
-      <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" step="1" value="50" aria-label="Volume">
+    <div class="header-actions">
+      <button class="mute-btn dev-link" id="devLinkBtn" title="Developer" aria-label="Developer page">&lt;/&gt;</button>
+      <div class="volume-control">
+        <button class="mute-btn" id="muteBtn" title="Mute sound" aria-label="Mute sound">🔊</button>
+        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" step="1" value="50" aria-label="Volume">
+      </div>
     </div>
   </header>
 
@@ -366,6 +482,106 @@
   </div>
 
   <footer>multiple of 15s · max 5 minutes</footer>
+</div>
+
+<div id="pageDev" style="display:none">
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="#" id="devBrandLink">
+        <div class="glyph">⌨</div>
+        <b>TYPE<span style="color:var(--accent)">.</span></b>
+      </a>
+      <div class="navlinks">
+        <a href="#" id="devNavBackBtn" class="active">back to test</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow">open source · no signup</div>
+    <h1>Built by a developer who<br>got tired of <span class="accent">bloated</span> typing tests.</h1>
+    <p>TYPE. is a single-file typing test with letter-balanced practice, live stats, and zero tracking — built and maintained in the open.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://github.com/aviy01" target="_blank" rel="noopener">↗ view source</a>
+      <a class="btn btn-ghost" href="#" id="devBackBtn">back to test</a>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="dstat"><b>1</b><span>HTML file</span></div>
+    <div class="dstat"><b>0</b><span>Dependencies</span></div>
+    <div class="dstat"><b>4</b><span>Typing modes</span></div>
+    <div class="dstat"><b>MIT</b><span>License</span></div>
+  </div>
+
+  <div class="wrap">
+    <section>
+      <div class="section-head">
+        <h2>Why this exists</h2>
+        <p>A few principles the project is built around</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="ic">◆</div>
+          <h3>No accounts, no ads</h3>
+          <p>Open the file and type. Nothing to sign up for, nothing tracking you in the background.</p>
+        </div>
+        <div class="card">
+          <div class="ic">▲</div>
+          <h3>Letter-balanced practice</h3>
+          <p>Pangram mode distributes every letter roughly evenly, instead of favoring common letters like every other test.</p>
+        </div>
+        <div class="card">
+          <div class="ic">●</div>
+          <h3>Actually useful feedback</h3>
+          <p>A ranked breakdown of exactly which characters you mistype, not just a single score.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Meet the developer</h2>
+        <p>The person behind TYPE.</p>
+      </div>
+      <div class="profile">
+        <div class="avatar">AY</div>
+        <div class="profile-body">
+          <h3>Avanish Yadav</h3>
+          <div class="role">Independent developer</div>
+          <p>I build small, fast, no-nonsense tools. TYPE. started as a weekend project and turned into something I actually use every day.</p>
+          <div class="profile-links">
+            <a href="https://github.com/aviy01" target="_blank" rel="noopener">GitHub</a>
+            <a href="mailto:aviy340@gmail.com">Email</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Built with</h2>
+        <p>No framework, no build step, no bloat</p>
+      </div>
+      <div class="dstack">
+        <span class="dchip"><span class="ddot"></span>HTML / CSS / JS</span>
+        <span class="dchip"><span class="ddot"></span>Web Audio API</span>
+        <span class="dchip"><span class="ddot"></span>JetBrains Mono</span>
+        <span class="dchip"><span class="ddot"></span>Zero frameworks</span>
+        <span class="dchip"><span class="ddot"></span>Zero backend</span>
+      </div>
+    </section>
+
+    <div class="cta">
+      <h2>Reach us</h2>
+      <p>Got feedback, a bug, or an idea? We'd like to hear it.</p>
+      <a class="btn btn-primary" href="mailto:aviy340@gmail.com?subject=TYPE.%20feedback">✉ reach us</a>
+    </div>
+  </div>
+
+  <footer class="dev-footer">
+    © 2026 TYPE. · <a href="#">source</a> · <a href="#">license</a> · <a href="#" id="devFooterBackBtn">back to test</a>
+  </footer>
 </div>
 
 <script>
@@ -1144,6 +1360,27 @@
     scrollToCaret();
     updateTimePulse();
   });
+
+  // ---------- page switching (test <-> developer) ----------
+  var pageTest = document.getElementById('pageTest');
+  var pageDev = document.getElementById('pageDev');
+
+  function showDevPage(){
+    pageTest.style.display = 'none';
+    pageDev.style.display = 'block';
+    window.scrollTo(0,0);
+  }
+  function showTestPage(){
+    pageDev.style.display = 'none';
+    pageTest.style.display = 'block';
+    window.scrollTo(0,0);
+  }
+
+  document.getElementById('devLinkBtn').addEventListener('click', showDevPage);
+  document.getElementById('devBrandLink').addEventListener('click', function(e){ e.preventDefault(); showTestPage(); });
+  document.getElementById('devNavBackBtn').addEventListener('click', function(e){ e.preventDefault(); showTestPage(); });
+  document.getElementById('devBackBtn').addEventListener('click', function(e){ e.preventDefault(); showTestPage(); });
+  document.getElementById('devFooterBackBtn').addEventListener('click', function(e){ e.preventDefault(); showTestPage(); });
 
   // ---------- init ----------
   timeValue.textContent = state.duration + 's';
