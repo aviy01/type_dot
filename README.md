@@ -5,6 +5,7 @@ A fast, minimal, single-file typing test — built for people who just want to t
 ![mode: words](https://img.shields.io/badge/mode-words-e2564f) ![mode: paragraph](https://img.shields.io/badge/mode-paragraph-e2564f) ![mode: numbers](https://img.shields.io/badge/mode-numbers-e2564f) ![mode: pangram](https://img.shields.io/badge/mode-pangram-e2564f)
 
 ---
+<https://typingdot.vercel.app/>
 
 ## Why TYPE.
 
