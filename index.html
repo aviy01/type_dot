@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>typeDot-practice typing</title>
+<title>TYPE — a typing test</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -52,7 +52,15 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
   }
   .brand-text h1{font-size:21px;font-weight:800;letter-spacing:2.5px;margin:0;color:var(--paper);}
-  .brand-text h1 .dot{color:var(--accent);}
+  .brand-text h1 .dot{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    width:11px;height:11px;margin-left:1px;vertical-align:baseline;
+  }
+  .brand-text h1 .dot i{
+    position:relative;width:6px;height:6px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 6px 1px var(--accent-glow);
+    display:block;
+  }
   .brand-text .tag{font-size:10.5px;color:var(--pending);letter-spacing:1.6px;text-transform:uppercase;}
 
   .mute-btn{
@@ -105,6 +113,26 @@
   .seg button.active{background:var(--accent);color:#1d1b17;font-weight:700;}
 
   .time-control{display:flex;align-items:center;gap:12px;}
+  .time-slider-wrap{position:relative;display:inline-flex;align-items:center;}
+  .time-pulse{
+    position:absolute;top:50%;width:14px;height:14px;
+    transform:translate(-50%,-50%);pointer-events:none;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .time-pulse i{
+    position:relative;width:6px;height:6px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 6px 1px var(--accent-glow);
+    display:block;
+  }
+  .time-pulse::before,
+  .time-pulse::after{
+    content:"";position:absolute;top:50%;left:50%;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    transform:translate(-50%,-50%);
+    animation:rec-ping 1.6s cubic-bezier(.25,.6,.4,1) infinite;
+  }
+  .time-pulse::after{animation-delay:.8s;}
   .time-control label{font-size:10.5px;color:var(--pending);text-transform:uppercase;letter-spacing:1.4px;}
   .time-control input[type=range]{
     -webkit-appearance:none;width:150px;height:4px;background:var(--bg-2);border-radius:3px;outline:none;
@@ -112,11 +140,10 @@
   }
   .time-control input[type=range]::-webkit-slider-thumb{
     -webkit-appearance:none;width:15px;height:15px;border-radius:50%;
-    background:var(--accent);cursor:pointer;border:2px solid var(--panel);
-    box-shadow:0 0 0 1px var(--accent-dim);
+    background:transparent;cursor:pointer;border:none;box-shadow:none;
   }
   .time-control input[type=range]::-moz-range-thumb{
-    width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--panel);
+    width:15px;height:15px;border-radius:50%;background:transparent;cursor:pointer;border:none;
   }
   .time-value{font-size:13px;color:var(--paper);font-weight:700;min-width:44px;text-align:right;font-variant-numeric:tabular-nums;}
 
@@ -189,7 +216,29 @@
     align-items:center;justify-content:center;font-size:14px;color:var(--pending);
     letter-spacing:.5px;cursor:text;border-radius:16px;
   }
-  .focus-hint span{border-bottom:1px dashed var(--pending);padding-bottom:2px;}
+  .focus-hint span{padding-bottom:2px;}
+  .focus-hint .rec{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    width:8px;height:8px;margin-right:11px;flex-shrink:0;
+  }
+  .focus-hint .rec::before,
+  .focus-hint .rec::after{
+    content:"";position:absolute;top:50%;left:50%;
+    width:8px;height:8px;border-radius:50%;
+    background:var(--accent);
+    transform:translate(-50%,-50%);
+    animation:rec-ping 1.6s cubic-bezier(.25,.6,.4,1) infinite;
+  }
+  .focus-hint .rec::after{animation-delay:.8s;}
+  .focus-hint .rec i{
+    position:relative;width:8px;height:8px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 6px 1px var(--accent-glow);
+    display:block;
+  }
+  @keyframes rec-ping{
+    0%{width:8px;height:8px;opacity:.55;}
+    100%{width:26px;height:26px;opacity:0;}
+  }
 
   /* results */
   .results{display:none;}
@@ -250,7 +299,7 @@
     <div class="brand">
       <div class="glyph">⌨</div>
       <div class="brand-text">
-        <h1>TYPE<span class="dot">.</span></h1>
+        <h1>TYPE<span class="dot"><i></i></span></h1>
         <div class="tag">typing test</div>
       </div>
     </div>
@@ -272,7 +321,10 @@
     <div class="control-group">
       <div class="time-control">
         <label for="timeRange">time</label>
-        <input type="range" id="timeRange" min="15" max="300" step="15" value="60">
+        <div class="time-slider-wrap">
+          <input type="range" id="timeRange" min="15" max="300" step="15" value="30">
+          <div class="time-pulse" id="timePulse"><i></i></div>
+        </div>
         <span class="time-value" id="timeValue">60s</span>
       </div>
     </div>
@@ -283,13 +335,13 @@
 
   <div class="stage" id="stage">
     <div class="hud">
-      <div class="metric timer"><b id="timerDisplay">60</b>seconds left</div>
+      <div class="metric timer"><b id="timerDisplay">30</b>seconds left</div>
       <div class="metric"><b id="wpmDisplay">0</b>wpm</div>
       <div class="metric"><b id="accDisplay">100%</b>accuracy</div>
     </div>
     <div class="panel">
       <div class="text-display" id="textDisplay" tabindex="0"></div>
-      <div class="focus-hint" id="focusHint"><span>click here and start typing</span></div>
+      <div class="focus-hint" id="focusHint"><span class="rec"><i></i></span><span>click here and start typing</span></div>
     </div>
     <input type="text" class="hidden-input" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
   </div>
@@ -566,7 +618,7 @@
   // ---------- state ----------
   var state = {
     mode: "words",
-    duration: 60,
+    duration: 30,
     tokens: [],
     chars: [],
     wordSpanRanges: [],
@@ -598,6 +650,7 @@
   var muteBtn = document.getElementById('muteBtn');
   var volumeSlider = document.getElementById('volumeSlider');
   var timeRange = document.getElementById('timeRange');
+  var timePulse = document.getElementById('timePulse');
   var timeValue = document.getElementById('timeValue');
   var modeSeg = document.getElementById('modeSeg');
   var restartBtn = document.getElementById('restartBtn');
@@ -1013,9 +1066,19 @@
     resetTest();
   });
 
+  function updateTimePulse(){
+    var min = parseFloat(timeRange.min), max = parseFloat(timeRange.max);
+    var pct = (parseFloat(timeRange.value) - min) / (max - min);
+    var thumb = 15;
+    var track = timeRange.clientWidth;
+    var left = thumb/2 + pct * (track - thumb);
+    timePulse.style.left = left + 'px';
+  }
+
   timeRange.addEventListener('input', function(){
     state.duration = parseInt(timeRange.value,10);
     timeValue.textContent = state.duration + 's';
+    updateTimePulse();
     resetTest();
   });
 
@@ -1079,11 +1142,13 @@
     setupTextHeight();
     positionCaret();
     scrollToCaret();
+    updateTimePulse();
   });
 
   // ---------- init ----------
   timeValue.textContent = state.duration + 's';
   resetTest();
+  updateTimePulse();
 
 })();
 </script>
