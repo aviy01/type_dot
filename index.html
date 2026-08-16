@@ -77,6 +77,11 @@
   .dev-link{
     text-decoration:none;font-family:inherit;font-size:13px;font-weight:600;
   }
+  .nav-text-link{
+    width:auto;padding:0 16px;letter-spacing:.6px;text-transform:uppercase;font-size:11px;font-weight:700;
+    color:var(--accent);border-color:var(--accent-dim);background:rgba(226,86,79,.08);
+  }
+  .nav-text-link:hover{background:rgba(226,86,79,.16);border-color:var(--accent);color:var(--accent-2);}
 
   .volume-control{
     display:flex;align-items:center;gap:11px;
@@ -271,6 +276,67 @@
   .chip .letter{font-weight:700;color:var(--error);font-size:15px;}
   .chip .count{font-size:11.5px;color:var(--pending);font-variant-numeric:tabular-nums;}
   .mistyped-empty{text-align:center;font-size:13px;color:var(--pending);}
+
+  .curated-cta{
+    display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    border:1px solid var(--accent-dim);border-radius:14px;
+    padding:26px 28px;margin-bottom:30px;
+  }
+  .curated-cta-text h3{
+    font-size:14px;font-weight:700;margin:0 0 8px;color:var(--paper);
+  }
+  .curated-cta-text p{font-size:12.5px;color:var(--pending);line-height:1.65;margin:0 auto;max-width:480px;}
+  .curated-cta-text .cc-letters{color:var(--accent);font-weight:700;}
+  .curated-start-btn{
+    background:var(--accent);color:#1d1b17;border:none;padding:12px 26px;border-radius:999px;
+    font-family:inherit;font-weight:700;font-size:12.5px;letter-spacing:.4px;cursor:pointer;
+    white-space:nowrap;transition:background .18s,transform .12s;
+  }
+  .curated-start-btn:hover{background:var(--accent-2);}
+  .curated-start-btn:active{transform:scale(.97);}
+
+  .curated-banner{
+    display:none;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    border:1px solid var(--accent-dim);border-radius:12px;
+    padding:11px 18px;margin-bottom:16px;font-size:12.5px;color:var(--paper);
+  }
+  .curated-banner .cb-letters{color:var(--accent);font-weight:700;}
+  .curated-banner .cb-exit{
+    background:transparent;border:1px solid var(--border-soft);color:var(--pending);
+    border-radius:999px;padding:6px 15px;font-family:inherit;font-size:11.5px;cursor:pointer;
+    transition:border-color .18s,color .18s;
+  }
+  .curated-banner .cb-exit:hover{border-color:var(--accent-dim);color:var(--paper);}
+
+  /* ---------- test-detail modal ---------- */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(10,9,7,.72);
+    align-items:center;justify-content:center;z-index:50;padding:20px;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-card{
+    position:relative;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    border:1px solid var(--border-soft);border-radius:18px;padding:40px 32px 32px;
+  }
+  .modal-meta{
+    text-align:center;font-size:11px;color:var(--pending);letter-spacing:.6px;
+    text-transform:uppercase;margin-bottom:22px;
+  }
+  .modal-close{
+    position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:9px;
+    background:var(--bg-2);border:1px solid var(--border-soft);color:var(--pending);
+    font-family:inherit;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:border-color .18s,color .18s;
+  }
+  .modal-close:hover{border-color:var(--accent-dim);color:var(--paper);}
+
+  @media (max-width:560px){
+    .curated-cta-text p{max-width:none;}
+    .curated-banner{flex-direction:column;align-items:stretch;text-align:center;}
+  }
   .try-again{
     background:linear-gradient(180deg, var(--accent-2), var(--accent));color:#1d1b17;border:none;
     padding:13px 28px;border-radius:999px;
@@ -297,111 +363,135 @@
   }
 
   /* ---------- developer page ---------- */
-  #pageDev{width:100%;}
-  #pageDev .wrap{max-width:960px;margin:0 auto;padding:0 24px;}
-  #pageDev nav{
+  .subpage{width:100%;}
+  .subpage .wrap{max-width:960px;margin:0 auto;padding:0 24px;}
+  .subpage nav{
     display:flex;align-items:center;justify-content:space-between;padding:22px 0;
     border-bottom:1px solid var(--border-soft);
   }
-  #pageDev nav .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--paper);}
-  #pageDev nav .brand .glyph{
+  .subpage nav .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--paper);}
+  .subpage nav .brand .glyph{
     width:30px;height:30px;border-radius:7px;background:linear-gradient(155deg,var(--panel-2),var(--panel));
     border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
     font-size:14px;color:var(--accent);
   }
-  #pageDev nav .brand b{font-size:16px;font-weight:800;letter-spacing:2px;}
-  #pageDev .navlinks{display:flex;gap:28px;font-size:12.5px;color:var(--pending);}
-  #pageDev .navlinks a{color:inherit;text-decoration:none;letter-spacing:.4px;transition:color .18s;}
-  #pageDev .navlinks a:hover{color:var(--paper);}
-  #pageDev .navlinks a.active{color:var(--accent);}
+  .subpage nav .brand b{font-size:16px;font-weight:800;letter-spacing:2px;}
+  .subpage .navlinks{display:flex;gap:28px;font-size:12.5px;color:var(--pending);}
+  .subpage .navlinks a{color:inherit;text-decoration:none;letter-spacing:.4px;transition:color .18s;}
+  .subpage .navlinks a:hover{color:var(--paper);}
+  .subpage .navlinks a.active{
+    color:var(--accent);border:1px solid var(--accent-dim);border-radius:999px;
+    padding:6px 14px;transition:color .18s,border-color .18s;
+  }
+  .subpage .navlinks a.active:hover{border-color:var(--accent);}
 
-  #pageDev .hero{padding:60px 0 56px;text-align:center;border-bottom:1px solid var(--border-soft);}
-  #pageDev .eyebrow{
+  .subpage .hero{padding:60px 0 56px;text-align:center;border-bottom:1px solid var(--border-soft);}
+  .subpage .eyebrow{
     display:inline-block;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;
     color:var(--accent);border:1px solid var(--accent-dim);border-radius:999px;
     padding:6px 16px;margin-bottom:22px;
   }
-  #pageDev .hero h1{font-size:32px;font-weight:800;letter-spacing:.5px;margin:0 0 16px;line-height:1.3;}
-  #pageDev .hero h1 .accent{color:var(--accent);}
-  #pageDev .hero p{font-size:14.5px;color:var(--pending);max-width:500px;margin:0 auto 28px;line-height:1.7;}
-  #pageDev .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-  #pageDev .btn{
+  .subpage .hero h1{font-size:32px;font-weight:800;letter-spacing:.5px;margin:0 0 16px;line-height:1.3;}
+  .subpage .hero h1 .accent{color:var(--accent);}
+  .subpage .hero p{font-size:14.5px;color:var(--pending);max-width:500px;margin:0 auto 28px;line-height:1.7;}
+  .subpage .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .subpage .btn{
     font-family:inherit;font-size:13px;letter-spacing:.4px;padding:12px 26px;border-radius:999px;
     text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .12s,border-color .18s,background .18s;
     cursor:pointer;
   }
-  #pageDev .btn:active{transform:scale(.97);}
-  #pageDev .btn-primary{background:var(--accent);color:#1d1b17;font-weight:700;border:1px solid var(--accent);}
-  #pageDev .btn-primary:hover{background:var(--accent-2);border-color:var(--accent-2);}
-  #pageDev .btn-ghost{background:transparent;color:var(--paper);border:1px solid var(--border);}
-  #pageDev .btn-ghost:hover{border-color:var(--accent-dim);}
+  .subpage .btn:active{transform:scale(.97);}
+  .subpage .btn-primary{background:var(--accent);color:#1d1b17;font-weight:700;border:1px solid var(--accent);}
+  .subpage .btn-primary:hover{background:var(--accent-2);border-color:var(--accent-2);}
+  .subpage .btn-ghost{background:transparent;color:var(--paper);border:1px solid var(--border);}
+  .subpage .btn-ghost:hover{border-color:var(--accent-dim);}
 
-  #pageDev .stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border-soft);}
-  #pageDev .dstat{padding:26px 20px;text-align:center;border-right:1px solid var(--border-soft);}
-  #pageDev .dstat:last-child{border-right:none;}
-  #pageDev .dstat b{display:block;font-size:24px;font-weight:800;color:var(--accent);}
-  #pageDev .dstat span{font-size:10.5px;color:var(--pending);text-transform:uppercase;letter-spacing:1.4px;}
+  .subpage .stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border-soft);}
+  .subpage .dstat{padding:26px 20px;text-align:center;border-right:1px solid var(--border-soft);}
+  .subpage .dstat:last-child{border-right:none;}
+  .subpage .dstat b{display:block;font-size:24px;font-weight:800;color:var(--accent);}
+  .subpage .dstat span{font-size:10.5px;color:var(--pending);text-transform:uppercase;letter-spacing:1.4px;}
 
-  #pageDev section{padding:52px 0;border-bottom:1px solid var(--border-soft);}
-  #pageDev section:last-of-type{border-bottom:none;}
-  #pageDev .section-head{text-align:center;margin-bottom:38px;}
-  #pageDev .section-head h2{font-size:21px;font-weight:800;margin:0 0 10px;}
-  #pageDev .section-head p{font-size:13px;color:var(--pending);margin:0;}
+  .subpage section{padding:52px 0;border-bottom:1px solid var(--border-soft);}
+  .subpage section:last-of-type{border-bottom:none;}
+  .subpage .section-head{text-align:center;margin-bottom:38px;}
+  .subpage .section-head h2{font-size:21px;font-weight:800;margin:0 0 10px;}
+  .subpage .section-head p{font-size:13px;color:var(--pending);margin:0;}
 
-  #pageDev .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  #pageDev .card{
+  .subpage .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .subpage .card{
     background:linear-gradient(180deg,var(--panel-2),var(--panel));
     border:1px solid var(--border-soft);border-radius:14px;padding:24px 20px;
   }
-  #pageDev .card .ic{
+  .subpage .card .ic{
     width:36px;height:36px;border-radius:9px;background:var(--bg-2);border:1px solid var(--border-soft);
     display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:16px;margin-bottom:14px;
   }
-  #pageDev .card h3{font-size:14px;margin:0 0 8px;font-weight:700;}
-  #pageDev .card p{font-size:12.5px;color:var(--pending);line-height:1.65;margin:0;}
+  .subpage .card h3{font-size:14px;margin:0 0 8px;font-weight:700;}
+  .subpage .card p{font-size:12.5px;color:var(--pending);line-height:1.65;margin:0;}
 
-  #pageDev .profile{
+  .subpage .profile{
     display:flex;gap:26px;align-items:center;
     background:linear-gradient(180deg,var(--panel-2),var(--panel));
     border:1px solid var(--border-soft);border-radius:16px;padding:30px;
   }
-  #pageDev .avatar{
+  .subpage .avatar{
     width:70px;height:70px;border-radius:50%;flex-shrink:0;
     background:linear-gradient(155deg,var(--accent),var(--accent-2));
     display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#1d1b17;
   }
-  #pageDev .profile-body h3{font-size:17px;margin:0 0 4px;}
-  #pageDev .profile-body .role{font-size:12px;color:var(--accent);letter-spacing:.5px;margin-bottom:12px;}
-  #pageDev .profile-body p{font-size:13px;color:var(--pending);line-height:1.7;margin:0 0 16px;max-width:460px;}
-  #pageDev .profile-links{display:flex;gap:10px;flex-wrap:wrap;}
-  #pageDev .profile-links a{
+  .subpage .profile-body h3{font-size:17px;margin:0 0 4px;}
+  .subpage .profile-body .role{font-size:12px;color:var(--accent);letter-spacing:.5px;margin-bottom:12px;}
+  .subpage .profile-body p{font-size:13px;color:var(--pending);line-height:1.7;margin:0 0 16px;max-width:460px;}
+  .subpage .profile-links{display:flex;gap:10px;flex-wrap:wrap;}
+  .subpage .profile-links a{
     font-size:12px;color:var(--paper);border:1px solid var(--border-soft);border-radius:999px;
     padding:7px 15px;text-decoration:none;transition:border-color .18s,color .18s;
   }
-  #pageDev .profile-links a:hover{border-color:var(--accent-dim);color:var(--accent);}
+  .subpage .profile-links a:hover{border-color:var(--accent-dim);color:var(--accent);}
 
-  #pageDev .dstack{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
-  #pageDev .dchip{
+  .subpage .dstack{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .subpage .dchip{
     background:var(--panel);border:1px solid var(--border-soft);border-radius:10px;
     padding:10px 18px;font-size:12.5px;color:var(--paper);display:flex;align-items:center;gap:8px;
   }
-  #pageDev .ddot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  .subpage .ddot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
 
-  #pageDev .cta{text-align:center;padding:48px 0;}
-  #pageDev .cta h2{font-size:20px;font-weight:800;margin:0 0 12px;}
-  #pageDev .cta p{font-size:13px;color:var(--pending);margin:0 0 24px;}
+  .subpage .cta{text-align:center;padding:48px 0;}
+  .subpage .cta h2{font-size:20px;font-weight:800;margin:0 0 12px;}
+  .subpage .cta p{font-size:13px;color:var(--pending);margin:0 0 24px;}
 
-  #pageDev .dev-footer{
+  .subpage .dev-footer{
     padding:28px 0;text-align:center;font-size:11px;color:var(--pending);letter-spacing:.4px;
     margin-top:0;
   }
-  #pageDev .dev-footer a{color:var(--pending);text-decoration:none;}
-  #pageDev .dev-footer a:hover{color:var(--accent);}
+  .subpage .dev-footer a{color:var(--pending);text-decoration:none;}
+  .subpage .dev-footer a:hover{color:var(--accent);}
+
+  .subpage .empty-state{text-align:center;padding:60px 20px;color:var(--pending);font-size:13.5px;line-height:1.8;}
+  .subpage .empty-state b{display:block;color:var(--paper);font-size:17px;margin-bottom:8px;}
+
+  .subpage .history-list{display:flex;flex-direction:column;gap:8px;}
+  .subpage .history-item{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    background:var(--panel);border:1px solid var(--border-soft);border-radius:12px;
+    padding:14px 18px;cursor:pointer;transition:border-color .18s,background .18s;
+  }
+  .subpage .history-item:hover{border-color:var(--accent-dim);background:var(--panel-2);}
+  .subpage .history-item .hi-left{display:flex;align-items:center;gap:10px;}
+  .subpage .history-item .hi-mode{
+    font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--pending);
+    background:var(--bg-2);border:1px solid var(--border-soft);border-radius:6px;padding:4px 9px;
+  }
+  .subpage .history-item .hi-num{font-size:12px;color:var(--pending);}
+  .subpage .history-item .hi-stats{display:flex;gap:18px;font-size:12.5px;color:var(--pending);}
+  .subpage .history-item .hi-stats b{color:var(--paper);font-weight:700;}
+  .subpage .history-item .hi-chevron{color:var(--pending);font-size:16px;}
 
   @media (max-width:640px){
-    #pageDev .grid{grid-template-columns:1fr;}
-    #pageDev .stats{grid-template-columns:repeat(2,1fr);}
-    #pageDev .profile{flex-direction:column;text-align:center;}
+    .subpage .grid{grid-template-columns:1fr;}
+    .subpage .stats{grid-template-columns:repeat(2,1fr);}
+    .subpage .profile{flex-direction:column;text-align:center;}
   }
 </style>
 </head>
@@ -417,7 +507,8 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="mute-btn dev-link" id="devLinkBtn" title="Developer" aria-label="Developer page">&lt;/&gt;</button>
+      <button class="mute-btn dev-link nav-text-link" id="dashboardLinkBtn" title="Analysis dashboard" aria-label="Analysis dashboard">analysis</button>
+      <button class="mute-btn dev-link nav-text-link" id="devLinkBtn" title="Developer" aria-label="Developer page">&lt;dev/&gt;</button>
       <div class="volume-control">
         <button class="mute-btn" id="muteBtn" title="Mute sound" aria-label="Mute sound">🔊</button>
         <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" step="1" value="50" aria-label="Volume">
@@ -450,6 +541,10 @@
   </div>
 
   <div class="stage" id="stage">
+    <div class="curated-banner" id="curatedBanner">
+      <span class="cb-label">🎯 curated session — practicing <span class="cb-letters" id="curatedLettersLabel"></span></span>
+      <button class="cb-exit" id="exitCuratedBtn">exit</button>
+    </div>
     <div class="hud">
       <div class="metric timer"><b id="timerDisplay">30</b>seconds left</div>
       <div class="metric"><b id="wpmDisplay">0</b>wpm</div>
@@ -475,6 +570,13 @@
         <h3>mistyped letters</h3>
         <div class="mistyped-chips" id="mistypedChips"></div>
       </div>
+      <div class="curated-cta" id="curatedCta">
+        <div class="curated-cta-text">
+          <h3>Curated typing session</h3>
+          <p>Practice words containing your most mistyped letters from this test — <span class="cc-letters" id="curatedCtaLetters"></span> — so you drill exactly what tripped you up, instead of retyping everything from scratch.</p>
+        </div>
+        <button class="curated-start-btn" id="startCuratedBtn">start curated session →</button>
+      </div>
       <div class="results-foot">
         <button class="try-again" id="tryAgainBtn">type again</button>
       </div>
@@ -484,7 +586,7 @@
   <footer>multiple of 15s · max 5 minutes</footer>
 </div>
 
-<div id="pageDev" style="display:none">
+<div id="pageDev" class="subpage" style="display:none">
   <div class="wrap">
     <nav>
       <a class="brand" href="#" id="devBrandLink">
@@ -582,6 +684,90 @@
   <footer class="dev-footer">
     © 2026 TYPE. · <a href="#">source</a> · <a href="#">license</a> · <a href="#" id="devFooterBackBtn">back to test</a>
   </footer>
+</div>
+
+<div id="pageDashboard" class="subpage" style="display:none">
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="#" id="dashBrandLink">
+        <div class="glyph">⌨</div>
+        <b>TYPE<span style="color:var(--accent)">.</span></b>
+      </a>
+      <div class="navlinks">
+        <a href="#" id="dashNavBackBtn" class="active">back to test</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="hero" style="padding:48px 0 40px;">
+    <div class="eyebrow">your typing history</div>
+    <h1 style="font-size:26px;">Comprehensive analysis</h1>
+    <p>Every test you've run this session, all in one place — with a shortcut to drill your weakest letters.</p>
+  </div>
+
+  <div class="wrap">
+    <div id="dashboardEmpty" class="empty-state">
+      <b>No tests attempted yet</b>
+      Finish a typing test and it'll show up here, along with your stats.
+    </div>
+
+    <div id="dashboardContent" style="display:none;">
+      <div class="stats" style="border-bottom:1px solid var(--border-soft);margin-bottom:0;">
+        <div class="dstat"><b id="dashTotalTests">0</b><span>tests attempted</span></div>
+        <div class="dstat"><b id="dashAvgWpm">0</b><span>avg wpm</span></div>
+        <div class="dstat"><b id="dashBestWpm">0</b><span>best wpm</span></div>
+        <div class="dstat"><b id="dashAvgAcc">0%</b><span>avg accuracy</span></div>
+      </div>
+
+      <section>
+        <div class="section-head">
+          <h2>Test history</h2>
+          <p>Click any test to see its full scoreboard</p>
+        </div>
+        <div class="history-list" id="dashHistoryList"></div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Top 5 mistyped letters</h2>
+          <p>Across every test you've attempted</p>
+        </div>
+        <div class="mistyped-chips" id="dashTopLetters" style="margin-bottom:0;"></div>
+      </section>
+
+      <section>
+        <div class="curated-cta" id="dashCuratedCta" style="margin-bottom:0;">
+          <div class="curated-cta-text">
+            <h3>Curated typing session</h3>
+            <p>Practice words containing your most mistyped letters across <em>all</em> attempted tests — <span class="cc-letters" id="dashCuratedLetters"></span>.</p>
+          </div>
+          <button class="curated-start-btn" id="dashStartCuratedBtn">start curated session →</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="dev-footer">
+    © 2026 TYPE. · <a href="#" id="dashFooterBackBtn">back to test</a>
+  </footer>
+</div>
+
+<div class="modal-overlay" id="testDetailOverlay">
+  <div class="modal-card">
+    <button class="modal-close" id="testDetailClose" aria-label="Close">✕</button>
+    <div class="modal-meta" id="detailMeta"></div>
+    <div class="results-grid">
+      <div class="stat"><b id="detailWpm">0</b><span>wpm</span></div>
+      <div class="stat"><b id="detailAcc">0%</b><span>accuracy</span></div>
+      <div class="stat"><b id="detailChars">0</b><span>characters</span></div>
+      <div class="stat"><b id="detailMistypedCount">0</b><span>mistyped</span></div>
+      <div class="stat"><b id="detailTime">0s</b><span>time</span></div>
+    </div>
+    <div class="mistyped-section">
+      <h3>mistyped letters</h3>
+      <div class="mistyped-chips" id="detailMistypedChips"></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -824,10 +1010,44 @@
     }
     return out;
   }
+
+  // Curated mode: words drawn from a combined real-word dictionary,
+  // filtered down to ones that contain at least one of the letters the
+  // person struggles with most, so practice time goes straight at the
+  // actual weak spots instead of generic random words.
+  var MASTER_WORD_POOL = Array.from(new Set(WORDS.concat(PANGRAM_POOL)));
+
+  function buildCuratedPool(letters){
+    if(!letters || letters.length===0) return MASTER_WORD_POOL;
+    var lower = letters.map(function(l){ return l.toLowerCase(); });
+    var pool = MASTER_WORD_POOL.filter(function(w){
+      for(var i=0;i<lower.length;i++){
+        if(w.indexOf(lower[i]) !== -1) return true;
+      }
+      return false;
+    });
+    return pool.length >= 8 ? pool : MASTER_WORD_POOL;
+  }
+
+  function genCuratedWords(n){
+    var pool = buildCuratedPool(state.curatedLetters);
+    var out=[];
+    var last=null;
+    for(var i=0;i<n;i++){
+      var w=pick(pool);
+      var guard=0;
+      while(w===last && guard<5){ w=pick(pool); guard++; }
+      out.push(w);
+      last=w;
+    }
+    return out;
+  }
+
   function genTokens(mode,n){
     if(mode==="words") return genWords(n);
     if(mode==="numbers") return genNumbers(n);
     if(mode==="pangram") return genPangramBalanced(n, state.pangramUsed);
+    if(mode==="curated") return genCuratedWords(n);
     return genParagraph(n);
   }
 
@@ -847,6 +1067,10 @@
     totalTyped: 0,
     correctTyped: 0,
     mistypes: {},
+    errorWordIdx: {},
+    curatedLetters: [],
+    prevMode: null,
+    testHistory: [],
     muted: false,
     volume: 0.5,       // 0..1, drives the slider
     volumeBeforeMute: 0.5,
@@ -1185,6 +1409,9 @@
     } else {
       var key = expected.ch === ' ' ? 'space' : expected.ch;
       state.mistypes[key] = (state.mistypes[key] || 0) + 1;
+      if(!expected.isSpace){
+        state.errorWordIdx[expected.wordIdx] = true;
+      }
     }
 
     state.currentIndex++;
@@ -1197,6 +1424,42 @@
   });
 
   // ---------- finish / results ----------
+  function shallowCopy(obj){
+    var out = {};
+    for(var k in obj){ if(Object.prototype.hasOwnProperty.call(obj,k)) out[k]=obj[k]; }
+    return out;
+  }
+
+  // Only real a-z characters count as "mistyped letters" for curation —
+  // stray space/digit mistakes don't translate into "words containing X".
+  function getTopMistypedLetters(mistypesObj, limit){
+    var entries = Object.keys(mistypesObj)
+      .filter(function(k){ return /^[a-zA-Z]$/.test(k); })
+      .map(function(k){ return { letter:k.toLowerCase(), count:mistypesObj[k] }; });
+    entries.sort(function(a,b){ return b.count - a.count; });
+    return entries.slice(0, limit);
+  }
+
+  function aggregateMistypes(){
+    var agg = {};
+    state.testHistory.forEach(function(t){
+      Object.keys(t.mistypes).forEach(function(k){
+        agg[k] = (agg[k]||0) + t.mistypes[k];
+      });
+    });
+    return agg;
+  }
+
+  function aggregateMistypedWords(){
+    var agg = {};
+    state.testHistory.forEach(function(t){
+      Object.keys(t.mistypedWords).forEach(function(w){
+        agg[w] = (agg[w]||0) + t.mistypedWords[w];
+      });
+    });
+    return agg;
+  }
+
   function finishTest(){
     state.finished = true;
     clearInterval(state.timerInterval);
@@ -1206,15 +1469,43 @@
 
     var elapsedMin = state.duration/60;
     var wpm = Math.round((state.correctTyped/5)/elapsedMin);
+    wpm = isFinite(wpm)&&wpm>0 ? wpm : 0;
     var acc = state.totalTyped>0 ? Math.round((state.correctTyped/state.totalTyped)*100) : 100;
 
-    document.getElementById('resWpm').textContent = isFinite(wpm)&&wpm>0 ? wpm : 0;
+    document.getElementById('resWpm').textContent = wpm;
     document.getElementById('resAcc').textContent = acc + '%';
     document.getElementById('resChars').textContent = state.correctTyped + '/' + state.totalTyped;
     document.getElementById('resMistyped').textContent = (state.totalTyped - state.correctTyped);
     document.getElementById('resTime').textContent = state.duration + 's';
 
     renderMistypedChips();
+    renderCuratedCta();
+
+    // ---- record this attempt into test history (for the dashboard) ----
+    var mistypedWordsThisTest = {};
+    Object.keys(state.errorWordIdx).forEach(function(idxStr){
+      var idx = parseInt(idxStr,10);
+      var word = state.tokens[idx];
+      if(word){
+        mistypedWordsThisTest[word] = (mistypedWordsThisTest[word]||0) + 1;
+      }
+    });
+    if(state.totalTyped > 0){
+      state.testHistory.push({
+        id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
+        timestamp: Date.now(),
+        mode: state.mode,
+        curated: state.mode === 'curated',
+        duration: state.duration,
+        wpm: wpm,
+        acc: acc,
+        correctTyped: state.correctTyped,
+        totalTyped: state.totalTyped,
+        mistypedCount: (state.totalTyped - state.correctTyped),
+        mistypes: shallowCopy(state.mistypes),
+        mistypedWords: mistypedWordsThisTest
+      });
+    }
 
     resultsEl.classList.add('show');
   }
@@ -1239,6 +1530,53 @@
     container.innerHTML = html;
   }
 
+  // ---------- curated typing sessions ----------
+  function renderCuratedCta(){
+    var ctaEl = document.getElementById('curatedCta');
+    var top = getTopMistypedLetters(state.mistypes, 5);
+    if(top.length === 0){
+      ctaEl.style.display = 'none';
+      return;
+    }
+    ctaEl.style.display = 'flex';
+    var letters = top.map(function(e){ return e.letter; });
+    document.getElementById('curatedCtaLetters').textContent = letters.join(', ');
+    document.getElementById('startCuratedBtn').onclick = function(){
+      startCuratedSession(letters);
+    };
+  }
+
+  function startCuratedSession(letters){
+    if(state.mode !== 'curated'){ state.prevMode = state.mode; }
+    state.curatedLetters = letters.slice(0,5);
+    state.mode = 'curated';
+    modeSeg.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+    updateCuratedBanner();
+    showPage('test');
+    resetTest();
+  }
+
+  function exitCuratedSession(){
+    var target = state.prevMode || 'words';
+    state.mode = target;
+    state.curatedLetters = [];
+    modeSeg.querySelectorAll('button').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-mode') === target);
+    });
+    updateCuratedBanner();
+    resetTest();
+  }
+
+  function updateCuratedBanner(){
+    var banner = document.getElementById('curatedBanner');
+    if(state.mode === 'curated' && state.curatedLetters.length){
+      document.getElementById('curatedLettersLabel').textContent = state.curatedLetters.join(', ');
+      banner.style.display = 'flex';
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
   // ---------- setup / reset ----------
   function resetTest(){
     clearInterval(state.timerInterval);
@@ -1253,6 +1591,7 @@
     state.totalTyped = 0;
     state.correctTyped = 0;
     state.mistypes = {};
+    state.errorWordIdx = {};
     state.pangramUsed = {};
     state.pangramLastWord = null;
 
@@ -1279,6 +1618,8 @@
     modeSeg.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
     state.mode = btn.getAttribute('data-mode');
+    state.curatedLetters = [];
+    updateCuratedBanner();
     resetTest();
   });
 
@@ -1361,26 +1702,142 @@
     updateTimePulse();
   });
 
-  // ---------- page switching (test <-> developer) ----------
+  // ---------- page switching (test <-> developer <-> dashboard) ----------
   var pageTest = document.getElementById('pageTest');
   var pageDev = document.getElementById('pageDev');
+  var pageDashboard = document.getElementById('pageDashboard');
 
-  function showDevPage(){
-    pageTest.style.display = 'none';
-    pageDev.style.display = 'block';
-    window.scrollTo(0,0);
-  }
-  function showTestPage(){
-    pageDev.style.display = 'none';
-    pageTest.style.display = 'block';
+  function showPage(name){
+    pageTest.style.display = (name === 'test') ? 'block' : 'none';
+    pageDev.style.display = (name === 'dev') ? 'block' : 'none';
+    pageDashboard.style.display = (name === 'dashboard') ? 'block' : 'none';
+    if(name === 'dashboard') renderDashboard();
     window.scrollTo(0,0);
   }
 
-  document.getElementById('devLinkBtn').addEventListener('click', showDevPage);
-  document.getElementById('devBrandLink').addEventListener('click', function(e){ e.preventDefault(); showTestPage(); });
-  document.getElementById('devNavBackBtn').addEventListener('click', function(e){ e.preventDefault(); showTestPage(); });
-  document.getElementById('devBackBtn').addEventListener('click', function(e){ e.preventDefault(); showTestPage(); });
-  document.getElementById('devFooterBackBtn').addEventListener('click', function(e){ e.preventDefault(); showTestPage(); });
+  document.getElementById('devLinkBtn').addEventListener('click', function(){ showPage('dev'); });
+  document.getElementById('devBrandLink').addEventListener('click', function(e){ e.preventDefault(); showPage('test'); });
+  document.getElementById('devNavBackBtn').addEventListener('click', function(e){ e.preventDefault(); showPage('test'); });
+  document.getElementById('devBackBtn').addEventListener('click', function(e){ e.preventDefault(); showPage('test'); });
+  document.getElementById('devFooterBackBtn').addEventListener('click', function(e){ e.preventDefault(); showPage('test'); });
+
+  document.getElementById('dashboardLinkBtn').addEventListener('click', function(){ showPage('dashboard'); });
+  document.getElementById('dashBrandLink').addEventListener('click', function(e){ e.preventDefault(); showPage('test'); });
+  document.getElementById('dashNavBackBtn').addEventListener('click', function(e){ e.preventDefault(); showPage('test'); });
+  document.getElementById('dashFooterBackBtn').addEventListener('click', function(e){ e.preventDefault(); showPage('test'); });
+
+  document.getElementById('exitCuratedBtn').addEventListener('click', exitCuratedSession);
+
+  // ---------- dashboard ----------
+  function renderDashboard(){
+    var history = state.testHistory;
+    var emptyEl = document.getElementById('dashboardEmpty');
+    var contentEl = document.getElementById('dashboardContent');
+
+    if(history.length === 0){
+      emptyEl.style.display = 'block';
+      contentEl.style.display = 'none';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    contentEl.style.display = 'block';
+
+    var totalTests = history.length;
+    var avgWpm = Math.round(history.reduce(function(s,t){ return s+t.wpm; },0) / totalTests);
+    var bestWpm = Math.max.apply(null, history.map(function(t){ return t.wpm; }));
+    var avgAcc = Math.round(history.reduce(function(s,t){ return s+t.acc; },0) / totalTests);
+
+    document.getElementById('dashTotalTests').textContent = totalTests;
+    document.getElementById('dashAvgWpm').textContent = avgWpm;
+    document.getElementById('dashBestWpm').textContent = bestWpm;
+    document.getElementById('dashAvgAcc').textContent = avgAcc + '%';
+
+    // top 5 mistyped letters, aggregated across every attempted test —
+    // also the basis for the curated session just below.
+    var aggMistypes = aggregateMistypes();
+    var topLetters = getTopMistypedLetters(aggMistypes, 5);
+    var lettersContainer = document.getElementById('dashTopLetters');
+    if(topLetters.length === 0){
+      lettersContainer.innerHTML = '<div class="mistyped-empty">no mistyped letters yet</div>';
+    } else {
+      lettersContainer.innerHTML = topLetters.map(function(e){
+        return '<div class="chip"><span class="letter">'+escapeHtml(e.letter)+'</span><span class="count">×'+e.count+'</span></div>';
+      }).join('');
+    }
+
+    // curated session using letters mistyped most across ALL tests
+    var dashCta = document.getElementById('dashCuratedCta');
+    if(topLetters.length === 0){
+      dashCta.style.display = 'none';
+    } else {
+      dashCta.style.display = 'flex';
+      var letters = topLetters.map(function(e){ return e.letter; });
+      document.getElementById('dashCuratedLetters').textContent = letters.join(', ');
+      document.getElementById('dashStartCuratedBtn').onclick = function(){
+        startCuratedSession(letters);
+      };
+    }
+
+    // history list, most recent first
+    var listEl = document.getElementById('dashHistoryList');
+    var items = history.slice().reverse();
+    listEl.innerHTML = items.map(function(t, i){
+      var num = history.length - i;
+      var modeLabel = t.curated ? 'curated' : t.mode;
+      var d = new Date(t.timestamp);
+      var timeLabel = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      return '<div class="history-item" data-id="'+t.id+'">'+
+          '<div class="hi-left"><span class="hi-num">#'+num+'</span>'+
+          '<span class="hi-mode">'+escapeHtml(modeLabel)+'</span>'+
+          '<span class="hi-num">'+timeLabel+'</span></div>'+
+          '<div class="hi-stats"><span><b>'+t.wpm+'</b> wpm</span>'+
+          '<span><b>'+t.acc+'%</b> acc</span>'+
+          '<span><b>'+t.mistypedCount+'</b> mistyped</span></div>'+
+          '<span class="hi-chevron">›</span>'+
+        '</div>';
+    }).join('');
+
+    listEl.querySelectorAll('.history-item').forEach(function(item){
+      item.addEventListener('click', function(){
+        var id = item.getAttribute('data-id');
+        var entry = history.filter(function(t){ return t.id === id; })[0];
+        if(entry) openTestDetail(entry);
+      });
+    });
+  }
+
+  // ---------- test-detail modal ----------
+  function openTestDetail(entry){
+    document.getElementById('detailWpm').textContent = entry.wpm;
+    document.getElementById('detailAcc').textContent = entry.acc + '%';
+    document.getElementById('detailChars').textContent = entry.correctTyped + '/' + entry.totalTyped;
+    document.getElementById('detailMistypedCount').textContent = entry.mistypedCount;
+    document.getElementById('detailTime').textContent = entry.duration + 's';
+
+    var modeLabel = entry.curated ? 'curated practice' : entry.mode;
+    document.getElementById('detailMeta').textContent = modeLabel + ' · ' + new Date(entry.timestamp).toLocaleString();
+
+    var container = document.getElementById('detailMistypedChips');
+    var entries = Object.keys(entry.mistypes).map(function(k){ return { letter:k, count:entry.mistypes[k] }; });
+    entries.sort(function(a,b){ return b.count - a.count; });
+    if(entries.length === 0){
+      container.innerHTML = '<div class="mistyped-empty">no mistakes — flawless</div>';
+    } else {
+      container.innerHTML = entries.map(function(e){
+        var label = e.letter === 'space' ? 'space' : escapeHtml(e.letter);
+        return '<div class="chip"><span class="letter">'+label+'</span><span class="count">×'+e.count+'</span></div>';
+      }).join('');
+    }
+
+    document.getElementById('testDetailOverlay').classList.add('show');
+  }
+  function closeTestDetail(){
+    document.getElementById('testDetailOverlay').classList.remove('show');
+  }
+  document.getElementById('testDetailClose').addEventListener('click', closeTestDetail);
+  document.getElementById('testDetailOverlay').addEventListener('click', function(e){
+    if(e.target.id === 'testDetailOverlay') closeTestDetail();
+  });
 
   // ---------- init ----------
   timeValue.textContent = state.duration + 's';
