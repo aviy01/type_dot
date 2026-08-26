@@ -1306,14 +1306,14 @@
       var r = span.getBoundingClientRect();
       caretEl.style.height = (r.height) + 'px';
       caretEl.style.left = (r.left - containerRect.left) + 'px';
-      caretEl.style.top = (r.top - containerRect.top) + 'px';
+      caretEl.style.top = (r.top - containerRect.top + textDisplay.scrollTop) + 'px';
     } else {
       var last = getCharSpan(state.currentIndex-1);
       if(last){
         var lr = last.getBoundingClientRect();
         caretEl.style.height = lr.height + 'px';
         caretEl.style.left = (lr.right - containerRect.left) + 'px';
-        caretEl.style.top = (lr.top - containerRect.top) + 'px';
+        caretEl.style.top = (lr.top - containerRect.top + textDisplay.scrollTop) + 'px';
       }
     }
   }
@@ -1326,14 +1326,11 @@
     var r = span.getBoundingClientRect();
     var relativeTop = (r.top - containerRect.top) + textDisplay.scrollTop;
     var lineIndex = Math.round(relativeTop / lh);
-    var visibleLines = Math.max(1, Math.round(textDisplay.clientHeight / lh));
-    var currentTopLine = Math.round(textDisplay.scrollTop / lh);
-
-    if(lineIndex < currentTopLine){
-      textDisplay.scrollTop = lineIndex * lh;
-    } else if(lineIndex > currentTopLine + visibleLines - 1){
-      textDisplay.scrollTop = (lineIndex - visibleLines + 1) * lh;
-    }
+    // Keep the line being typed pinned to the second visible row: as soon as
+    // the caret would advance to a third row, the text shifts back by a line
+    // instead, so the caret itself never moves past row index 1.
+    var targetTopLine = Math.max(0, lineIndex - 1);
+    textDisplay.scrollTop = targetTopLine * lh;
   }
 
   // ---------- sound: user-provided click sample ----------
