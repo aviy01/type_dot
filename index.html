@@ -31,12 +31,35 @@
     --accent-2:#f0805a;
     --accent-dim:rgba(226,86,79,.4);
     --accent-glow:rgba(226,86,79,.55);
+    --overlay-bg:rgba(29,27,23,.88);
+    --hero-bg:#2a2620;
+    --scheme:dark;
+  }
+  html[data-theme="light"]{
+    --bg-1:#ffffff;
+    --bg-2:#efe7f7;
+    --panel:#faf8fd;
+    --panel-2:#f3eefa;
+    --border:#c2b2dc;
+    --border-soft:#e3dbf0;
+    --pending:#7d7093;
+    --paper:#2b1f45;
+    --error:#7c3aed;
+    --error-soft:rgba(124,58,237,.12);
+    --accent:#7c3aed;
+    --accent-2:#9861f2;
+    --accent-dim:rgba(124,58,237,.35);
+    --accent-glow:rgba(124,58,237,.45);
+    --overlay-bg:rgba(107,91,148,.62);
+    --hero-bg:#f3ecfc;
+    --scheme:light;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  html{color-scheme:var(--scheme);}
   body{
     background:
-      radial-gradient(circle at 50% -8%, #2a2620 0%, var(--bg-1) 45%, var(--bg-2) 100%);
+      radial-gradient(circle at 50% -8%, var(--hero-bg) 0%, var(--bg-1) 45%, var(--bg-2) 100%);
     color:var(--paper);
     font-family:'JetBrains Mono', monospace;
     min-height:100vh;
@@ -80,6 +103,32 @@
   .mute-btn:hover{border-color:var(--accent-dim);color:var(--paper);}
   .mute-btn:active{transform:scale(.93);}
   .mute-btn.active{color:var(--accent);border-color:var(--accent-dim);}
+
+  .theme-switch{
+    position:relative;width:52px;height:28px;border-radius:999px;flex-shrink:0;
+    background:#ece7de;border:1px solid #d8d2c5;cursor:pointer;
+    padding:0;
+  }
+  html[data-theme="light"] .theme-switch{background:#ece7de;border-color:#d8d2c5;}
+  html:not([data-theme="light"]) .theme-switch{background:rgba(226,86,79,.08);border-color:var(--accent-dim);}
+  .theme-switch .knob{
+    position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:12px;
+  }
+  html[data-theme="light"] .theme-switch .knob{
+    transform:translateX(0);
+    background:#ffffff;
+    box-shadow:0 1px 3px rgba(43,31,69,.25);
+  }
+  html:not([data-theme="light"]) .theme-switch .knob{
+    transform:translateX(24px);
+    background:var(--accent);
+    box-shadow:0 1px 3px rgba(0,0,0,.35);
+  }
+  .theme-switch .knob .icon{display:flex;align-items:center;justify-content:center;line-height:1;width:16px;height:16px;}
+  .theme-switch .knob .icon-sun{filter:none;}
+  .theme-switch .knob .icon-moon{filter:none;}
+  .theme-switch:hover{border-color:var(--accent-dim);}
 
   .header-actions{display:flex;align-items:center;gap:10px;}
   .dev-link{
@@ -128,7 +177,7 @@
     border-radius:999px;transition:background .18s,color .18s;
   }
   .seg button:hover{color:var(--paper);}
-  .seg button.active{background:var(--accent);color:#1d1b17;font-weight:700;}
+  .seg button.active{background:var(--accent);color:var(--bg-1);font-weight:700;}
 
   .time-control{display:flex;align-items:center;gap:12px;}
   .time-slider-wrap{position:relative;display:inline-flex;align-items:center;}
@@ -230,11 +279,12 @@
   }
 
   .focus-hint{
-    position:absolute;inset:0;background:rgba(29,27,23,.88);display:flex;
+    position:absolute;inset:0;background:var(--overlay-bg);display:flex;
     align-items:center;justify-content:center;font-size:14px;color:var(--pending);
     letter-spacing:.5px;cursor:text;border-radius:16px;
   }
   .focus-hint span{padding-bottom:2px;}
+  .focus-hint .hint-text{color:var(--paper);font-weight:700;}
   .focus-hint .rec{
     position:relative;display:inline-flex;align-items:center;justify-content:center;
     width:8px;height:8px;margin-right:11px;flex-shrink:0;
@@ -297,7 +347,7 @@
   .curated-cta-text p{font-size:12.5px;color:var(--pending);line-height:1.65;margin:0 auto;max-width:480px;}
   .curated-cta-text .cc-letters{color:var(--accent);font-weight:700;}
   .curated-start-btn{
-    background:var(--accent);color:#1d1b17;border:none;padding:12px 26px;border-radius:999px;
+    background:var(--accent);color:var(--bg-1);border:none;padding:12px 26px;border-radius:999px;
     font-family:inherit;font-weight:700;font-size:12.5px;letter-spacing:.4px;cursor:pointer;
     white-space:nowrap;transition:background .18s,transform .12s;
   }
@@ -346,7 +396,7 @@
     .curated-banner{flex-direction:column;align-items:stretch;text-align:center;}
   }
   .try-again{
-    background:linear-gradient(180deg, var(--accent-2), var(--accent));color:#1d1b17;border:none;
+    background:linear-gradient(180deg, var(--accent-2), var(--accent));color:var(--bg-1);border:none;
     padding:13px 28px;border-radius:999px;
     font-family:inherit;font-weight:700;font-size:13.5px;letter-spacing:.6px;cursor:pointer;
     box-shadow:0 10px 24px -10px var(--accent-glow);
@@ -409,7 +459,7 @@
     cursor:pointer;
   }
   .subpage .btn:active{transform:scale(.97);}
-  .subpage .btn-primary{background:var(--accent);color:#1d1b17;font-weight:700;border:1px solid var(--accent);}
+  .subpage .btn-primary{background:var(--accent);color:var(--bg-1);font-weight:700;border:1px solid var(--accent);}
   .subpage .btn-primary:hover{background:var(--accent-2);border-color:var(--accent-2);}
   .subpage .btn-ghost{background:transparent;color:var(--paper);border:1px solid var(--border);}
   .subpage .btn-ghost:hover{border-color:var(--accent-dim);}
@@ -446,7 +496,7 @@
   .subpage .avatar{
     width:70px;height:70px;border-radius:50%;flex-shrink:0;
     background:linear-gradient(155deg,var(--accent),var(--accent-2));
-    display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#1d1b17;
+    display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--bg-1);
   }
   .subpage .profile-body h3{font-size:17px;margin:0 0 4px;}
   .subpage .profile-body .role{font-size:12px;color:var(--accent);letter-spacing:.5px;margin-bottom:12px;}
@@ -502,6 +552,16 @@
     .subpage .profile{flex-direction:column;text-align:center;}
   }
 </style>
+<script>
+  // Set the theme before first paint to avoid a flash of the wrong colors.
+  (function(){
+    try{
+      var saved = localStorage.getItem('typedot-theme');
+      var theme = saved === 'light' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    }catch(e){}
+  })();
+</script>
 </head>
 <body>
 <div class="app" id="pageTest">
@@ -517,6 +577,26 @@
     <div class="header-actions">
       <button class="mute-btn dev-link nav-text-link" id="dashboardLinkBtn" title="Analysis dashboard" aria-label="Analysis dashboard">analysis</button>
       <button class="mute-btn dev-link nav-text-link" id="devLinkBtn" title="Developer" aria-label="Developer page">&lt;dev/&gt;</button>
+      <button class="theme-switch" id="themeToggleBtn" role="switch" aria-checked="false" title="Toggle light / dark theme" aria-label="Toggle light or dark theme">
+        <span class="knob">
+          <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="4.2" stroke="#e8aa40" stroke-width="2"/>
+            <g stroke="#e8aa40" stroke-width="2" stroke-linecap="round">
+              <line x1="12" y1="1.6" x2="12" y2="3.6"/>
+              <line x1="12" y1="20.4" x2="12" y2="22.4"/>
+              <line x1="4.2" y1="4.2" x2="5.7" y2="5.7"/>
+              <line x1="18.3" y1="18.3" x2="19.8" y2="19.8"/>
+              <line x1="1.6" y1="12" x2="3.6" y2="12"/>
+              <line x1="20.4" y1="12" x2="22.4" y2="12"/>
+              <line x1="4.2" y1="19.8" x2="5.7" y2="18.3"/>
+              <line x1="18.3" y1="5.7" x2="19.8" y2="4.2"/>
+            </g>
+          </svg>
+          <svg class="icon icon-moon" style="display:none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="var(--bg-1)"/>
+          </svg>
+        </span>
+      </button>
       <div class="volume-control">
         <button class="mute-btn" id="muteBtn" title="Mute sound" aria-label="Mute sound">🔊</button>
         <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" step="1" value="50" aria-label="Volume">
@@ -560,7 +640,7 @@
     </div>
     <div class="panel">
       <div class="text-display" id="textDisplay" tabindex="0"></div>
-      <div class="focus-hint" id="focusHint"><span class="rec"><i></i></span><span>click here and start typing</span></div>
+      <div class="focus-hint" id="focusHint"><span class="rec"><i></i></span><span class="hint-text">click here and start typing</span></div>
     </div>
     <input type="text" class="hidden-input" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
   </div>
@@ -1702,6 +1782,27 @@
   });
 
   updateVolumeUI();
+
+  // ---------- theme toggle (light / dark) ----------
+  var themeToggleBtn = document.getElementById('themeToggleBtn');
+  function getTheme(){
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  }
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    themeToggleBtn.setAttribute('aria-checked', theme === 'light' ? 'true' : 'false');
+    themeToggleBtn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+    themeToggleBtn.title = theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme';
+    var sunIcon = themeToggleBtn.querySelector('.icon-sun');
+    var moonIcon = themeToggleBtn.querySelector('.icon-moon');
+    sunIcon.style.display = theme === 'light' ? 'flex' : 'none';
+    moonIcon.style.display = theme === 'light' ? 'none' : 'flex';
+    try{ localStorage.setItem('typedot-theme', theme); }catch(e){}
+  }
+  setTheme(getTheme());
+  themeToggleBtn.addEventListener('click', function(){
+    setTheme(getTheme() === 'light' ? 'dark' : 'light');
+  });
 
   window.addEventListener('resize', function(){
     setupTextHeight();
