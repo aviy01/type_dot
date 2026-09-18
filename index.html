@@ -212,7 +212,7 @@
   .time-control input[type=range]::-moz-range-thumb{
     width:15px;height:15px;border-radius:50%;background:transparent;cursor:pointer;border:none;
   }
-  .time-value{font-size:13px;color:var(--paper);font-weight:700;min-width:44px;text-align:right;font-variant-numeric:tabular-nums;}
+  .time-value{font-size:13px;color:var(--pending);font-weight:700;min-width:44px;text-align:right;font-variant-numeric:tabular-nums;}
 
   .restart-btn{
     background:var(--bg-2);border:1px solid var(--border-soft);color:var(--pending);
@@ -271,6 +271,7 @@
     background:var(--accent);
     box-shadow:0 0 10px 1px var(--accent-glow);
     animation:blink 1s step-end infinite;pointer-events:none;
+    transition:left .09s ease-out;
   }
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 
@@ -417,7 +418,7 @@
   }
 
   @media (prefers-reduced-motion: reduce){
-    .caret{animation:none;}
+    .caret{animation:none;transition:none;}
   }
 
   /* ---------- developer page ---------- */
@@ -617,10 +618,10 @@
       <div class="time-control">
         <label for="timeRange">time</label>
         <div class="time-slider-wrap">
-          <input type="range" id="timeRange" min="15" max="300" step="15" value="30">
+          <input type="range" id="timeRange" min="30" max="300" step="30" value="30">
           <div class="time-pulse" id="timePulse"><i></i></div>
         </div>
-        <span class="time-value" id="timeValue">60s</span>
+        <span class="time-value" id="timeValue">30s</span>
       </div>
     </div>
     <div class="control-group">
@@ -671,7 +672,7 @@
     </div>
   </div>
 
-  <footer>multiple of 15s · max 5 minutes</footer>
+  <footer>multiple of 30s · max 5 minutes</footer>
 </div>
 
 <div id="pageDev" class="subpage" style="display:none">
@@ -1561,7 +1562,7 @@
     document.getElementById('resAcc').textContent = acc + '%';
     document.getElementById('resChars').textContent = state.correctTyped + '/' + state.totalTyped;
     document.getElementById('resMistyped').textContent = (state.totalTyped - state.correctTyped);
-    document.getElementById('resTime').textContent = state.duration + 's';
+    document.getElementById('resTime').textContent = formatDuration(state.duration);
 
     renderMistypedChips();
     renderCuratedCta();
@@ -1708,6 +1709,16 @@
     resetTest();
   });
 
+  // Below a minute, show plain seconds ("30s"); at or above a minute,
+  // switch to minutes ("1 min", "1.5 min", "2 min"...) since that reads
+  // more naturally once the number of seconds gets larger.
+  function formatDuration(sec){
+    if(sec < 60) return sec + 's';
+    var mins = Math.round((sec / 60) * 10) / 10;
+    var label = (mins % 1 === 0) ? mins.toFixed(0) : mins.toFixed(1);
+    return label + ' min';
+  }
+
   function updateTimePulse(){
     var min = parseFloat(timeRange.min), max = parseFloat(timeRange.max);
     var pct = (parseFloat(timeRange.value) - min) / (max - min);
@@ -1719,7 +1730,7 @@
 
   timeRange.addEventListener('input', function(){
     state.duration = parseInt(timeRange.value,10);
-    timeValue.textContent = state.duration + 's';
+    timeValue.textContent = formatDuration(state.duration);
     updateTimePulse();
     resetTest();
   });
@@ -1918,7 +1929,7 @@
     document.getElementById('detailAcc').textContent = entry.acc + '%';
     document.getElementById('detailChars').textContent = entry.correctTyped + '/' + entry.totalTyped;
     document.getElementById('detailMistypedCount').textContent = entry.mistypedCount;
-    document.getElementById('detailTime').textContent = entry.duration + 's';
+    document.getElementById('detailTime').textContent = formatDuration(entry.duration);
 
     var modeLabel = entry.curated ? 'curated practice' : entry.mode;
     document.getElementById('detailMeta').textContent = modeLabel + ' · ' + new Date(entry.timestamp).toLocaleString();
@@ -1946,9 +1957,36 @@
   });
 
   // ---------- init ----------
-  timeValue.textContent = state.duration + 's';
-  resetTest();
-  updateTimePulse();
+  timeValue.textContent = formatDuration(state.duration);
+
+  // The custom webfont loads async (display=swap), so the very first
+  // render can happen in a fallback monospace font and then silently
+  // reflow — words jumping to different lines — the moment the real font
+  // lands. That reflow is far more noticeable on longer word sets (e.g.
+  // pangram mode) and tends to land right as someone clicks in and starts
+  // typing, which reads as "the text changed on my first keystroke."
+  // Wait briefly for the webfont (bounded so a slow/failed load never
+  // blocks startup) before the first render, so it's laid out correctly
+  // from the start.
+  function startApp(){
+    resetTest();
+    updateTimePulse();
+  }
+  if(document.fonts && document.fonts.ready){
+    var fontsReady = document.fonts.ready;
+    var fontTimeout = new Promise(function(resolve){ setTimeout(resolve, 300); });
+    Promise.race([fontsReady, fontTimeout]).then(startApp);
+    // Safety net: if a mode switch ever renders text just before the font
+    // finishes loading, resync the box height, caret and scroll the instant
+    // it lands instead of leaving it for the next keystroke to correct.
+    fontsReady.then(function(){
+      setupTextHeight();
+      positionCaret();
+      scrollToCaret();
+    });
+  } else {
+    startApp();
+  }
 
 })();
 </script>
